@@ -1,7 +1,17 @@
 const ejs = require('ejs')
 const express = require('express')
+const { initDatabase, getDatabase, insertPlant, getPlants } = require('./db')
+const { default: Plant } = require('./plant')
 const app = express()
 const port = 3000
+
+initDatabase()
+const db = getDatabase()
+
+const p = new Plant("MON-2025-01", "Monstera", "Monstera deliciosa", "01-06-2025")
+
+insertPlant(db, p)
+getPlants(db)
 
 
 let plants = [

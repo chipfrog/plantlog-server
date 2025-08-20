@@ -47,3 +47,6 @@ temp/
 .eslintcache
 .cache/
 .parcel-cache/
+
+# Databases
+*.db
