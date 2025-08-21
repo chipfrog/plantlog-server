@@ -6,7 +6,6 @@ const path = require("path")
 const app = express()
 const port = 3000
 
-
 // Database initialization
 initDatabase()
 const db = getDatabase()
@@ -21,6 +20,9 @@ insertPlant(db, p2)
 insertPlant(db, p3)
 getPlants(db)
 
+app.use(express.static(path.join(__dirname, "public")))
+
+// Routing
 
 app.get('/', (req, res) => {
     console.log('homepage')

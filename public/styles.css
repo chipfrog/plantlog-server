@@ -1,9 +1,53 @@
 body {
-    /* display: flex;
-    padding: 5rem; */
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: antiquewhite;
 }
 
-#container {
+#header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+#primary-title {
+    margin-bottom: 0;
+}
+
+#secondary-title {
+    margin-left: 5rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: lightgray;
+    border-radius: 1rem;
+}
+
+#img-container {
+    width: 75%;
+    height: 40vh;
+}
+
+#plant-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0 20rem 20rem 0;
+}
+
+main {
+    
+
+}
+
+/* #container {
+    display: flex;
     border: 4px solid black;
     background-color: aquamarine;
-}
+    width: 100vh;
+    height: 100%;
+} */
