@@ -1,58 +1,40 @@
 const ejs = require('ejs')
 const express = require('express')
-const { initDatabase, getDatabase, insertPlant, getPlants } = require('./db')
+const { initDatabase, getDatabase, insertPlant, getPlants, getPlant, eraseAllData } = require('./db')
 const { default: Plant } = require('./plant')
+const path = require("path")
 const app = express()
 const port = 3000
 
+
+// Database initialization
 initDatabase()
 const db = getDatabase()
+eraseAllData(db)
 
-const p = new Plant("MON-2025-01", "Monstera", "Monstera deliciosa", "01-06-2025")
+const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "01-06-2025")
+const p2 = new Plant("JUO-2025-01", "Juovatraakkipuu", "Dracaena deremensis", "01-07-2025")
+const p3 = new Plant("KAH-2025-01", "Kahvipuu", "Coffea arabica")
 
-insertPlant(db, p)
+insertPlant(db, p1)
+insertPlant(db, p2)
+insertPlant(db, p3)
 getPlants(db)
-
-
-let plants = [
-    {
-        id: 1,
-        name: "Peikonlehti",
-        waterings: 0
-    },
-    {
-        id: 2,
-        name: "Traakkipuu",
-        waterings: 4
-    }
-]
-
-const getPlant = (id) => {
-    let plant
-
-    for (let p of plants) {
-        console.log(p)
-        if (p.id == id) {
-            return p
-        }
-    }
-    return "No plant found :("
-}
 
 
 app.get('/', (req, res) => {
     console.log('homepage')
-    res.sendFile('views/plant.html', { root: __dirname })
+    res.sendFile(path.join(__dirname, "views", 'home.html'))
+})
+
+app.get('/plant/:code', (req, res) => {
+    console.log(`req.params.code: ${req.params.code}`)
+    const plant = getPlant(db, req.params.code)
+    res.sendFile(path.join(__dirname, "views", "plant.html"))
 })
 
 app.get('/plant', (req, res) => {
     console.log('IN_PLANT')
-})
-
-app.get('/plant/:id', (req, res) => {
-    const plant = getPlant(req.params.id)
-    console.log(plant)
-    res.send(plant)
 })
 
 app.post('/', (req, res) => {

@@ -1,5 +1,6 @@
 
 const Database = require('better-sqlite3')
+const { default: Plant } = require('./plant')
 
 let db
 
@@ -62,7 +63,28 @@ function initDatabase() {
 function insertPlant(db, plant) {
     const insert = db.prepare('INSERT INTO PLANTS (code, name, latin_name, date_acquired) VALUES (?, ?, ?, ?)')
     const info = insert.run(plant.code, plant.name, plant.latinName, plant.dateAquired )
-    console.log(info.changes)
+    // console.log(info.changes)
+}
+
+function getPlant(db, code) {
+    console.log(code)
+    const stmt = db.prepare("SELECT * FROM plants WHERE code = ?")
+    const dbPlant = stmt.get(code)
+
+    if (!dbPlant) {
+        console.log(`No plant with code: ${code}`)
+        return null
+    }
+    const plant = new Plant(
+        dbPlant.code, 
+        dbPlant.name, 
+        dbPlant.latin_name, 
+        dbPlant.date_acquired
+    )
+
+    console.log('Fetched plant:')
+    console.log(dbPlant)
+    return plant
 }
 
 function getPlants(db) {
@@ -72,6 +94,12 @@ function getPlants(db) {
     console.log(plants)
 }
 
+function eraseAllData(db) {
+    const deleteAll = db.prepare('DELETE FROM plants')
+    const info = deleteAll.run()
+    console.log(info)
+}
 
-module.exports = { getDatabase, initDatabase, insertPlant, getPlants }
+
+module.exports = { getDatabase, initDatabase, insertPlant, getPlants, getPlant, eraseAllData }
 
