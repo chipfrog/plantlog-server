@@ -1,10 +1,34 @@
-const ejs = require('ejs')
-const express = require('express')
-const { initDatabase, getDatabase, insertPlant, getPlants, getPlant, eraseAllData } = require('./db')
-const { default: Plant } = require('./plant')
-const path = require("path")
+// const ejs = require('ejs')
+// const express = require('express')
+// const { initDatabase, getDatabase, insertPlant, getPlants, getPlant, eraseAllData } = require('./db')
+// const { default: Plant } = require('./plant')
+// const path = require("path")
+// const { fileURLToPath } = require('url')
+
+import ejs from 'ejs'
+import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import {
+    initDatabase,
+    getDatabase,
+    insertPlant,
+    getPlants,
+    getPlant,
+    eraseAllData
+} from './db.js'
+
+import Plant from './plant.js'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express()
 const port = 3000
+
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
+app.use(express.static(path.join(__dirname, "public")))
 
 // Database initialization
 initDatabase()
@@ -20,8 +44,6 @@ insertPlant(db, p2)
 insertPlant(db, p3)
 getPlants(db)
 
-app.use(express.static(path.join(__dirname, "public")))
-
 // Routing
 
 app.get('/', (req, res) => {
@@ -32,7 +54,13 @@ app.get('/', (req, res) => {
 app.get('/plant/:code', (req, res) => {
     console.log(`req.params.code: ${req.params.code}`)
     const plant = getPlant(db, req.params.code)
-    res.sendFile(path.join(__dirname, "views", "plant.html"))
+    // res.sendFile(path.join(__dirname, "views", "plant.html"))
+    res.render('plant' , { plant })
+})
+
+app.post('/plant/:code/waterings', (req, res) => {
+    console.log('GOT WATERING!')
+    res.send('watered!')
 })
 
 app.get('/plant', (req, res) => {

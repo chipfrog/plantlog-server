@@ -1,15 +1,15 @@
 
-const Database = require('better-sqlite3')
-const { default: Plant } = require('./plant')
+import Database from 'better-sqlite3'
+import Plant from './plant.js'
 
 let db
 
-function getDatabase() {
+export function getDatabase() {
     if (!db) throw new Error("Database not initialized.")
     return db
 }
 
-function initDatabase() {
+export function initDatabase() {
     if (db) return db // Makes sure only on database connection is created, if multiple calls to initDatabase()
     db = new Database('plantlog.db')
     db.exec("PRAGMA foreign_keys = ON;")
@@ -60,13 +60,13 @@ function initDatabase() {
     return db
 }
 
-function insertPlant(db, plant) {
+export function insertPlant(db, plant) {
     const insert = db.prepare('INSERT INTO PLANTS (code, name, latin_name, date_acquired) VALUES (?, ?, ?, ?)')
     const info = insert.run(plant.code, plant.name, plant.latinName, plant.dateAquired )
     // console.log(info.changes)
 }
 
-function getPlant(db, code) {
+export function getPlant(db, code) {
     console.log(code)
     const stmt = db.prepare("SELECT * FROM plants WHERE code = ?")
     const dbPlant = stmt.get(code)
@@ -87,19 +87,15 @@ function getPlant(db, code) {
     return plant
 }
 
-function getPlants(db) {
+export function getPlants(db) {
     const getAll = db.prepare('SELECT * FROM plants')
     const plants = getAll.all()
 
     console.log(plants)
 }
 
-function eraseAllData(db) {
+export function eraseAllData(db) {
     const deleteAll = db.prepare('DELETE FROM plants')
     const info = deleteAll.run()
     console.log(info)
 }
-
-
-module.exports = { getDatabase, initDatabase, insertPlant, getPlants, getPlant, eraseAllData }
-

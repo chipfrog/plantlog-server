@@ -5,18 +5,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Plant Log</title>
         <div id="header">
-            <h1 id="primary-title">Peikonlehti</h1>
-            <h4 id="secondary-title"><i>Monstera deliciosa</i></h4>
+            <h1 id="primary-title"><%= plant.name %></h1>
+            <h4 id="secondary-title"><i><%= plant.latinName %></i></h4>
         </div>
         <link rel="stylesheet" href="/styles.css">
     </head>
     <body>
-        <main>
+        <main id="app" data-plant-code="<%= JSON.stringify(plant.code) %>">
             <div id="img-container">
                 <img id="plant-img" src="/images/monstera.jpg">
             </div>
-            <!-- <i>Monstera</i> -->
-     
+            <div id="btn-row-bottom">
+                <button id="water-btn">Test</button>
+            </div>
         </main>
+        <script src="/plantview.js" type="module" defer></script>
     </body>
 </html>

@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "css-sync": "browser-sync start --proxy 'localhost:3000' --files 'public/*.css, views/*.html'"
   },
   "author": "",
   "license": "ISC",
