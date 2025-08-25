@@ -70,14 +70,13 @@ export function insertWatering(db, watering) {
     const plantId = getPlantId(db, watering.plantCode)
     const stmt = db.prepare('INSERT INTO WATERINGS (plant_id, watered_at, method, amount_ml) VALUES (?, ?, ?, ?)')
     const info = stmt.run(plantId, watering.wateredAt, watering.method, watering.amountMl)
-    console.log(info.changes)
+    const waterings = getWaterings(db, watering.plantCode)
+    return waterings
 }
 
 export function getPlantId(db, code) {
     const stmt = db.prepare("SELECT id FROM plants WHERE code = ?")
     const plantId = stmt.get(code).id
-
-    console.log(`id in db: ${plantId}`)
     return plantId
 }
 

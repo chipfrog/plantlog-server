@@ -1,10 +1,3 @@
-// const ejs = require('ejs')
-// const express = require('express')
-// const { initDatabase, getDatabase, insertPlant, getPlants, getPlant, eraseAllData } = require('./db')
-// const { default: Plant } = require('./plant')
-// const path = require("path")
-// const { fileURLToPath } = require('url')
-
 import ejs from 'ejs'
 import express from 'express'
 import path from 'path'
@@ -57,26 +50,27 @@ app.get('/', (req, res) => {
 })
 
 app.get('/plant/:code', (req, res) => {
-    console.log(`req.params.code: ${req.params.code}`)
     const plant = getPlant(db, req.params.code)
-
     const waterings = getWaterings(db, req.params.code)
     let lastWatered = "No waterings recorded"
-    console.log(waterings)
     if (waterings) {
         lastWatered =  formatDate(waterings[0].watered_at)
     }
-
     res.render('plant' , { plant, lastWatered })
 })
 
 app.post('/plant/:code/waterings', (req, res) => {
-    console.log('GOT WATERING!')
     const timeStamp = Date.now()
     const watering = req.body
     watering.wateredAt = timeStamp
-    insertWatering(db, watering)
-    res.send('watered!')
+    
+    const waterings = insertWatering(db, watering)
+    let lastWatered = "No waterings recorded"
+    if (waterings) {
+        lastWatered =  formatDate(waterings[0].watered_at)
+    }
+    res.json({ lastWatered: lastWatered })
+
 })
 
 app.get('/plant', (req, res) => {

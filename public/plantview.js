@@ -1,5 +1,7 @@
 const mainApp = document.getElementById("app")
 const waterBtn = document.getElementById("water-btn")
+const wateredText = document.getElementById("last-watered")
+
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
 
 waterBtn.addEventListener('click', (e) => {
@@ -9,8 +11,6 @@ waterBtn.addEventListener('click', (e) => {
 
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
-
-    console.log(url)
 
     try {
         const res = await fetch(url, {
@@ -22,17 +22,13 @@ async function addWatering() {
                 method: "mist"
             })
         })
-
-        console.log(res)
-
-        // if (!res.ok) {
-        //     const err = await res.json().catch(() => ({}));
-        //     throw new Error(err.message || `HTTP ${res.status}`);
-        // }
-        // const data = await res.json();
-        // console.log("Watered:", data);
-        // update UI (toast, badge, etc.)
-
+´        if (!res.ok) {
+            const err = await res.json().catch(() => ({}))
+            throw new Error(err.message || `HTTP ${res.status}`)
+        }
+        const updateData = await res.json()
+        wateredText.innerHTML = updateData.lastWatered
+        
     } catch(e) {
         console.error(e);
         alert("Failed to log watering.");
