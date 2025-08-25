@@ -15,10 +15,14 @@ import {
     insertPlant,
     getPlants,
     getPlant,
-    eraseAllData
+    getPlantId,
+    getWaterings,
+    eraseAllData,
+    insertWatering
 } from './db.js'
 
 import Plant from './plant.js'
+import { formatDate } from './utils.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +33,7 @@ const port = 3000
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, "public")))
+app.use(express.json());
 
 // Database initialization
 initDatabase()
@@ -54,12 +59,23 @@ app.get('/', (req, res) => {
 app.get('/plant/:code', (req, res) => {
     console.log(`req.params.code: ${req.params.code}`)
     const plant = getPlant(db, req.params.code)
-    // res.sendFile(path.join(__dirname, "views", "plant.html"))
-    res.render('plant' , { plant })
+
+    const waterings = getWaterings(db, req.params.code)
+    let lastWatered = "No waterings recorded"
+    console.log(waterings)
+    if (waterings) {
+        lastWatered =  formatDate(waterings[0].watered_at)
+    }
+
+    res.render('plant' , { plant, lastWatered })
 })
 
 app.post('/plant/:code/waterings', (req, res) => {
     console.log('GOT WATERING!')
+    const timeStamp = Date.now()
+    const watering = req.body
+    watering.wateredAt = timeStamp
+    insertWatering(db, watering)
     res.send('watered!')
 })
 

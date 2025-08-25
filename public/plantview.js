@@ -25,12 +25,12 @@ async function addWatering() {
 
         console.log(res)
 
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.message || `HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        console.log("Watered:", data);
+        // if (!res.ok) {
+        //     const err = await res.json().catch(() => ({}));
+        //     throw new Error(err.message || `HTTP ${res.status}`);
+        // }
+        // const data = await res.json();
+        // console.log("Watered:", data);
         // update UI (toast, badge, etc.)
 
     } catch(e) {

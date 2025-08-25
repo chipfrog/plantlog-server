@@ -66,6 +66,21 @@ export function insertPlant(db, plant) {
     // console.log(info.changes)
 }
 
+export function insertWatering(db, watering) {
+    const plantId = getPlantId(db, watering.plantCode)
+    const stmt = db.prepare('INSERT INTO WATERINGS (plant_id, watered_at, method, amount_ml) VALUES (?, ?, ?, ?)')
+    const info = stmt.run(plantId, watering.wateredAt, watering.method, watering.amountMl)
+    console.log(info.changes)
+}
+
+export function getPlantId(db, code) {
+    const stmt = db.prepare("SELECT id FROM plants WHERE code = ?")
+    const plantId = stmt.get(code).id
+
+    console.log(`id in db: ${plantId}`)
+    return plantId
+}
+
 export function getPlant(db, code) {
     console.log(code)
     const stmt = db.prepare("SELECT * FROM plants WHERE code = ?")
@@ -85,6 +100,17 @@ export function getPlant(db, code) {
     console.log('Fetched plant:')
     console.log(dbPlant)
     return plant
+}
+
+export function getWaterings(db, code) {
+    const plantId = getPlantId(db, code)
+    const stmt = db.prepare('SELECT * FROM waterings WHERE plant_id = ? ORDER BY watered_at DESC')
+    const waterings = stmt.all(plantId)
+    if (waterings.length < 1) {
+        console.log(`No waterings recorded for plant ${code}`)
+        return null
+    }
+    return waterings
 }
 
 export function getPlants(db) {
