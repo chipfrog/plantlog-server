@@ -7,5 +7,6 @@ export function formatDate(ms) {
     const minutes = String(date.getMinutes()).padStart(2, "0")
     const seconds = String(date.getSeconds()).padStart(2, "0")
 
-    return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`
+    return `${day}.${month}.${year}`
+    // return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`
 }

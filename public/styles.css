@@ -1,5 +1,5 @@
 :root {
-    --bg:#f5fbf3;
+    --bg: #fffddc;
     --text: ;
     --surface: #d2f693;
     --border: #053034;
@@ -19,25 +19,10 @@ body {
     padding: 0;
     position: fixed;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: var(--bg);
     font-family: 'Rubik', monospace;
 }
-
-#label {
-
-}
-
-/* button {
-    all: unset;
-    cursor: pointer;
-    text-align: center;
-    -webkit-tap-highlight-color: transparent;
-} */
-
-/* button:focus {
-    outline: none;
-} */
 
 #header {
     display: flex;
@@ -76,15 +61,14 @@ body {
     position: absolute;
     width: 100%;
     bottom: 1rem;
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 #water-btn {
-    width: 5rem;
-    height: 5rem;
+    width: 4rem;
+    height: 4rem;
     background-color: var(--primary);
     border-radius: 50%;
 }
@@ -92,7 +76,6 @@ body {
 .info-card {
     display: flex;
     flex-direction: column;
-    justify-self: end;
     justify-content: start;
     align-items: start;
     width: 70%;
@@ -101,4 +84,24 @@ body {
     background-color: var(--surface);
     border-radius: 12px;
     box-shadow: 3px 3px 5px lightslategray;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    display: grid;
+    grid-template-columns: 100px auto;
+    align-items: center;
+    margin-bottom: 1rem; 
+}
+
+.pill {
+    text-align: center;
+    margin-left: 0.5rem;
+    padding: 0.2rem;
+    border-radius: 16px;
+    background-color: beige;
 }

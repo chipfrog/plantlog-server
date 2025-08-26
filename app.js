@@ -65,7 +65,7 @@ app.post('/plant/:code/waterings', (req, res) => {
     watering.wateredAt = timeStamp
     
     const waterings = insertWatering(db, watering)
-    let lastWatered = "No waterings recorded"
+    let lastWatered = "No waterings"
     if (waterings) {
         lastWatered =  formatDate(waterings[0].watered_at)
     }
