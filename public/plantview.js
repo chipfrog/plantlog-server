@@ -22,13 +22,13 @@ async function addWatering() {
                 method: "mist"
             })
         })
-´        if (!res.ok) {
+        if (!res.ok) {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
         const updateData = await res.json()
         wateredText.innerHTML = updateData.lastWatered
-        
+
     } catch(e) {
         console.error(e);
         alert("Failed to log watering.");

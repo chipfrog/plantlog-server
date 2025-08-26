@@ -6,7 +6,7 @@
         <title>Plant Log</title>
         <div id="header">
             <h1 id="primary-title"><%= plant.name %></h1>
-            <h4 id="secondary-title"><i><%= plant.latinName %></i></h4>
+            <h4 id="secondary-title"><i id="label"><%= plant.latinName %></i></h4>
         </div>
         <link rel="stylesheet" href="/styles.css">
     </head>
@@ -15,9 +15,15 @@
             <div id="img-container">
                 <img id="plant-img" src="/images/monstera.jpg">
             </div>
-            <i id="last-watered"><%= lastWatered %></i>
+            <div class="info-card">
+                <p id="last-watered">Watered: <%= lastWatered %></p>
+                <p>Fertilized:</p>
+                <p>Misted:</p>
+            </div>
             <div id="btn-row-bottom">
-                <button id="water-btn">Test</button>
+                <button id="water-btn">
+                    <img class="icon" src="/icons/water_drop.svg">
+                </button>
             </div>
         </main>
         <script src="/plantview.js" type="module" defer></script>
