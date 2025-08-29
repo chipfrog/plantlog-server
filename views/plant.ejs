@@ -12,20 +12,30 @@
     </head>
     <body>
         <main id="app" data-plant-code="<%= JSON.stringify(plant.code) %>">
-            <div id="img-container">
-                <img id="plant-img" src="/images/monstera.jpg">
+            <div id="info-view">
+                <div id="img-container">
+                    <img id="plant-img" src="/images/monstera.jpg">
+                </div>
+                <div class="info-card">
+                    <ul>
+                        <li>Watered: <span id="last-watered" class="pill" ><%= lastWatered %></span></li>
+                        <li>Fertilized:  <span class="pill">18.7.2025</span></li>
+                        <li>Misted: <span class="pill">23.8.2025</span></li>
+                    </ul>
+                </div>
+                <div id="btn-row-bottom">
+                    <button id="water-btn">
+                        <img class="icon" src="/icons/water_drop.svg">
+                    </button>
+                    <button id="toggle-view-btn">
+                        <img class="icon" src="/icons/potted_plant.svg">
+                    </button>
+                </div>
             </div>
-            <div class="info-card">
-                <ul>
-                    <li>Watered: <span id="last-watered" class="pill" ><%= lastWatered %></span></li>
-                    <li>Fertilized:  <span class="pill">18.7.2025</span></li>
-                    <li>Misted: <span class="pill">23.8.2025</span></li>
-                </ul>
-            </div>
-            <div id="btn-row-bottom">
-                <button id="water-btn">
-                    <img class="icon" src="/icons/water_drop.svg">
-                </button>
+            <div id="care-view">
+                <div id="canvas-container">
+                    <canvas id="water-canvas"></canvas>
+                </div>
             </div>
         </main>
         <script src="/plantview.js" type="module" defer></script>

@@ -1,10 +1,12 @@
 :root {
-    --bg: #fffddc;
+    --bg: #fde6c9;
     --text: ;
-    --surface: #d2f693;
+    --surface: #daf7a9;
     --border: #053034;
     --primary: #77d0d1;
     --muted: ;
+    --label: #ffffe7;
+    --overlay: rgba(255, 217, 168, 0.8)
 }
 
 @font-face {
@@ -67,9 +69,17 @@ body {
 }
 
 #water-btn {
+    display: none;
     width: 4rem;
     height: 4rem;
     background-color: var(--primary);
+    border-radius: 50%;
+}
+
+#toggle-view-btn {
+    z-index: 6;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
 }
 
@@ -103,5 +113,37 @@ li {
     margin-left: 0.5rem;
     padding: 0.2rem;
     border-radius: 16px;
-    background-color: beige;
+    background-color: var(--label);
+}
+
+#info-view {
+    z-index: -1;
+}
+
+#care-view {
+    z-index: 4;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 0;
+    background-color: var(--overlay);
+    backdrop-filter: blur(2px);
+    transition: width 0.3s ease;
+}
+
+#canvas-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#water-canvas {
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+    border: 2px solid black;
 }
