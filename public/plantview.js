@@ -5,6 +5,9 @@ const careView = document.getElementById("care-view")
 
 const waterBtn = document.getElementById("water-btn")
 const wateredText = document.getElementById("last-watered")
+const waterSlider = document.getElementById("water-slider")
+const waterDrop = document.getElementById("water_drop")
+
 const toggleViewBtn = document.getElementById("toggle-view-btn")
 const closeWaterViewBtn = document.getElementById("close-water-btn")
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
@@ -22,6 +25,11 @@ toggleViewBtn.addEventListener('click', (e) => {
 waterBtn.addEventListener('click', (e) => {
     e.preventDefault()
     addWatering()
+})
+
+waterSlider.addEventListener('input', (e) => {
+    e.preventDefault()
+
 })
 
 async function addWatering() {
@@ -48,5 +56,14 @@ async function addWatering() {
         console.error(e);
         alert("Failed to log watering.");
     }
-    
 }
+
+function animate() {
+    const y = waterSlider.value / 2000 * 64
+    const invertedY = 64 - y
+    waterDrop.setAttribute("y", `${invertedY}`)
+
+    requestAnimationFrame(animate)
+}
+
+requestAnimationFrame(animate)

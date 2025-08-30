@@ -164,8 +164,8 @@ li {
 }
 
 #water-slider {
-    writing-mode: vertical-rl;
+    /* writing-mode: vertical-rl;
     width: 50px;
-    direction: rtl;
+    direction: rtl; */
 
 }
