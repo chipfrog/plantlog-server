@@ -6,7 +6,7 @@
     --primary: #77d0d1;
     --muted: ;
     --label: #ffffe7;
-    --overlay: rgba(255, 217, 168, 0.8)
+    --overlay: rgba(174, 224, 230, 0.8)
 }
 
 @font-face {
@@ -64,8 +64,15 @@ body {
     width: 100%;
     bottom: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+}
+
+.round-btn {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    /* z-index: 6; */
 }
 
 #water-btn {
@@ -73,13 +80,6 @@ body {
     width: 4rem;
     height: 4rem;
     background-color: var(--primary);
-    border-radius: 50%;
-}
-
-#toggle-view-btn {
-    z-index: 6;
-    width: 3rem;
-    height: 3rem;
     border-radius: 50%;
 }
 
@@ -129,6 +129,7 @@ li {
     width: 100%;
     
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: var(--overlay);
@@ -142,8 +143,29 @@ li {
     transform: translateX(0);
 }
 
+#top-row {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#top-row h1 {
+    margin: 0;
+}
 
 
 #water-canvas {
     border: 2px solid black;
+}
+
+#water-slider {
+    writing-mode: vertical-rl;
+    width: 50px;
+    direction: rtl;
+
 }

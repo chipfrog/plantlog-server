@@ -3,19 +3,16 @@ const mainApp = document.getElementById("app")
 const infoView = document.getElementById("info-view")
 const careView = document.getElementById("care-view")
 
-const waterCanvas = document.getElementById("water-canvas")
-const ctx = waterCanvas.getContext("2d")
-
-waterCanvas.width = 50
-waterCanvas.height = 300
-
-let canWidth = 50
-let canHeight = 300
-
 const waterBtn = document.getElementById("water-btn")
 const wateredText = document.getElementById("last-watered")
 const toggleViewBtn = document.getElementById("toggle-view-btn")
+const closeWaterViewBtn = document.getElementById("close-water-btn")
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
+
+closeWaterViewBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    careView.classList.toggle('open')
+})
 
 toggleViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
@@ -52,11 +49,4 @@ async function addWatering() {
         alert("Failed to log watering.");
     }
     
-}
-
-
-function animateWaterJug(now) {
-
-
-    requestAnimationFrame(now)
 }
