@@ -36,13 +36,22 @@ waterBtn.addEventListener('click', (e) => {
 function convertYToSvgCoordinates(y) {
     const rect = waterSVG.getBoundingClientRect()
     const max = 2000
+    const min = 0
     const bottom = rect.bottom
 
     const relPos = bottom - y
     let temp = parseInt(max / 300 * relPos)
-    waterAmount = temp
-    let mod = temp % 100
-    waterAmountText.innerText = `${temp - mod} ml`
+
+    if (temp >= max) {
+        waterAmount = max
+    } else if (temp <= min) {
+        waterAmount = min
+    } else {
+        waterAmount = temp
+    }
+
+    let mod = waterAmount % 100
+    waterAmountText.innerText = `${waterAmount - mod} ml`
 } 
 
 waterSVG.addEventListener('mouseenter', (e) => {
@@ -67,8 +76,22 @@ document.addEventListener('mouseup', (e) => {
 
 waterSVG.addEventListener('mousemove', (e) => {
     e.preventDefault()
-    if (mouseOver && dragging) {
+    if (dragging) {
         convertYToSvgCoordinates(e.clientY)
+    }
+})
+
+waterSVG.addEventListener('touchstart', (e) => {
+    dragging = true
+})
+
+document.addEventListener('touchend', (e) => {
+    dragging = false
+})
+
+waterSVG.addEventListener('touchmove', (e) => {
+    if (dragging) {
+        convertYToSvgCoordinates(e.touches[0].clientY)
     }
 })
 
