@@ -75,14 +75,6 @@ body {
     /* z-index: 6; */
 }
 
-#water-btn {
-    display: none;
-    width: 4rem;
-    height: 4rem;
-    background-color: var(--primary);
-    border-radius: 50%;
-}
-
 .info-card {
     display: flex;
     flex-direction: column;
@@ -158,6 +150,13 @@ li {
     margin: 0;
 }
 
+#water-slider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 #water-drop-svg {
     overscroll-behavior: contain;
     touch-action: none;
@@ -167,4 +166,18 @@ li {
 
 #water-amount {
     font-size: xx-large;
+}
+
+#water-btn-row {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#water-btn {
+    font-size: x-large;
 }
