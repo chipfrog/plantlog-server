@@ -103,9 +103,10 @@ toggleViewBtn.addEventListener('click', (e) => {
     careView.classList.toggle('open')
 })
 
-waterBtn.addEventListener('click', (e) => {
+waterBtn.addEventListener('transitionend', (e) => {
     e.preventDefault()
-    if (waterAmount > 0) {
+    const style = getComputedStyle(waterBtn, '::before')
+    if (waterAmount > 0 && parseInt(style.width) > 0) {
         addWatering()
     }
 })

@@ -34,16 +34,19 @@ const db = getDatabase()
 eraseAllData(db)
 
 const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "01-06-2025")
-const p2 = new Plant("JUO-2025-01", "Juovatraakkipuu", "Dracaena deremensis", "01-07-2025")
+const p2 = new Plant("TRA-2025-01", "Juovatraakkipuu", "Dracaena deremensis", "01-07-2025")
 const p3 = new Plant("KAH-2025-01", "Kahvipuu", "Coffea arabica")
+const p4 = new Plant("PEI-2025-02", "Peikonlehti", "Monstera deliciosa", "01-06-2025")
+const p5 = new Plant("PAL-2025-01", "Palmuvehka", "Zamioculcas zamiifolia", "01-06-2025")
 
 insertPlant(db, p1)
 insertPlant(db, p2)
 insertPlant(db, p3)
+insertPlant(db, p4)
+insertPlant(db, p5)
 getPlants(db)
 
 // Routing
-
 app.get('/', (req, res) => {
     console.log('homepage')
     res.sendFile(path.join(__dirname, "views", 'home.html'))

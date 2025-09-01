@@ -26,6 +26,15 @@ body {
     font-family: 'Rubik', monospace;
 }
 
+h1, p, i, li, button, img {
+    user-select: none;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
 #header {
     display: flex;
     flex-direction: column;
@@ -179,5 +188,34 @@ li {
 }
 
 #water-btn {
+    position: relative;
+    padding: 15px 32px;
+    border-radius: 16px;
     font-size: x-large;
+    cursor: pointer;
+    background: none;
+    overflow: hidden;
 }
+
+#water-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: cyan;
+    transition: width 0.7s ease;
+    z-index: -1;
+}
+
+#water-btn:not(:disabled):active::before {
+    width: 100%;
+}
+
+#water-btn:disabled {
+    pointer-events: none;
+}
+
+
+
