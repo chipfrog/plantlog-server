@@ -158,14 +158,6 @@ li {
     margin: 0;
 }
 
-
-#water-canvas {
+#water-drop-svg {
     border: 2px solid black;
-}
-
-#water-slider {
-    /* writing-mode: vertical-rl;
-    width: 50px;
-    direction: rtl; */
-
 }
