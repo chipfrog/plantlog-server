@@ -14,8 +14,6 @@ const closeWaterViewBtn = document.getElementById("close-water-btn")
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
 
 let dragging = false
-let mouseMoving = false
-let mouseOver = false
 let waterAmount = 0
 
 closeWaterViewBtn.addEventListener('click', (e) => {
@@ -54,16 +52,6 @@ function convertYToSvgCoordinates(y) {
     waterAmountText.innerText = `${waterAmount - mod} ml`
 } 
 
-waterSVG.addEventListener('mouseenter', (e) => {
-    e.preventDefault()
-    mouseOver = true
-})
-
-waterSVG.addEventListener('mouseleave', (e) => {
-    e.preventDefault()
-    mouseOver = false
-})
-
 waterSVG.addEventListener('mousedown', (e) => {
     e.preventDefault()
     dragging = true
@@ -74,7 +62,7 @@ document.addEventListener('mouseup', (e) => {
     dragging = false
 })
 
-waterSVG.addEventListener('mousemove', (e) => {
+document.addEventListener('mousemove', (e) => {
     e.preventDefault()
     if (dragging) {
         convertYToSvgCoordinates(e.clientY)
