@@ -26,6 +26,7 @@ const waterMin = 0
 let dragging = false
 let waterAmount = 0 // send to db, 100 ml accuracy
 let waterSliderVal = 0 // for animating slider, 1 ml accuracy for smoother animation
+let wateringSuccess = false
 
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
@@ -44,9 +45,10 @@ async function addWatering() {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
-        showSuccessBtn()
         const updateData = await res.json()
+        wateringSuccess = true
         wateredText.innerHTML = updateData.lastWatered
+        showSuccessBtn()
 
     } catch(e) {
         console.error(e);
@@ -56,8 +58,22 @@ async function addWatering() {
 
 function showSuccessBtn() {
     waterBtn.innerText = "Plant watered!"
-    console.log(waterBtnInternals)
+    waterBtn.classList.add('success')
+    setTimeout(() => {
+        waterBtn.classList.remove('success')
+        waterBtn.innerText = "Hold to Water"
+    }, 2500)
     // waterBtnInternals.classList.add("success")
+}
+
+function emptyWaterMeter() {
+    waterSliderVal -= 10
+    waterAmount = waterSliderVal - (waterSliderVal % 100)
+    waterAmountText.innerText = `${waterAmount} ml`
+
+    if (waterSliderVal <= 0) {
+        wateringSuccess = false
+    }
 }
 
 function convertYToSvgCoordinates(y) {
@@ -87,7 +103,11 @@ function toggleWaterBtnActivity () {
     }
 }
 
+// TODO: Stop animation when watering screen not active !!
 function animate() {
+    if (wateringSuccess) {
+        emptyWaterMeter()
+    }
     const y = waterSliderVal/ 2000 * 64
     const invertedY = 64 - y
     waterRect.setAttribute("y", `${invertedY}`)
@@ -129,7 +149,7 @@ document.addEventListener('mouseup', (e) => {
 
 document.addEventListener('mousemove', (e) => {
     e.preventDefault()
-    if (dragging) {
+    if (dragging && !wateringSuccess) {
         convertYToSvgCoordinates(e.clientY)
     }
 })
@@ -143,7 +163,7 @@ document.addEventListener('touchend', (e) => {
 })
 
 waterSVG.addEventListener('touchmove', (e) => {
-    if (dragging) {
+    if (dragging && !wateringSuccess) {
         convertYToSvgCoordinates(e.touches[0].clientY)
     }
 })

@@ -193,8 +193,10 @@ li {
     border-radius: 16px;
     font-size: x-large;
     cursor: pointer;
-    background: none;
     overflow: hidden;
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 1s ease;
+    border: 1px solid lightseagreen;
 }
 
 #water-btn::before {
@@ -205,7 +207,7 @@ li {
     width: 0;
     height: 100%;
     background: cyan;
-    transition: width 0.7s ease;
+    transition: width 1s ease;
     z-index: -1;
 }
 
@@ -217,14 +219,8 @@ li {
     pointer-events: none;
 }
 
-.water-btn-internals {
-    
-    background-color: rgba(64, 153, 88, 0.8);
-}
-
-.success {
-    background-color: rgba(64, 153, 88, 0.8) !important;
-    
+#water-btn.success {
+    background-color: rgba(64, 153, 88, 1);
 }
 
 
