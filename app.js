@@ -33,11 +33,11 @@ initDatabase()
 const db = getDatabase()
 eraseAllData(db)
 
-const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "01-06-2025")
-const p2 = new Plant("TRA-2025-01", "Juovatraakkipuu", "Dracaena deremensis", "01-07-2025")
-const p3 = new Plant("KAH-2025-01", "Kahvipuu", "Coffea arabica")
-const p4 = new Plant("PEI-2025-02", "Peikonlehti", "Monstera deliciosa", "01-06-2025")
-const p5 = new Plant("PAL-2025-01", "Palmuvehka", "Zamioculcas zamiifolia", "01-06-2025")
+const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "/images/monstera.jpg", "01-06-2025")
+const p2 = new Plant("TRA-2025-01", "Juovatraakkipuu", "Dracaena deremensis", null, "01-07-2025")
+const p3 = new Plant("KAH-2025-01", "Kahvipuu", "Coffea arabica", null, null)
+const p4 = new Plant("PEI-2025-02", "Peikonlehti", "Monstera deliciosa", null, "01-06-2025")
+const p5 = new Plant("PAL-2025-01", "Palmuvehka", "Zamioculcas zamiifolia", null, "01-06-2025")
 
 insertPlant(db, p1)
 insertPlant(db, p2)
@@ -53,6 +53,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/plant/:code', (req, res) => {
+    console.log(`req.params.code: ${req.params.code}`)
     const plant = getPlant(db, req.params.code)
     const waterings = getWaterings(db, req.params.code)
     let lastWatered = "No waterings recorded"

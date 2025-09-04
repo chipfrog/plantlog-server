@@ -22,6 +22,7 @@ export function initDatabase() {
             code TEXT,
             name TEXT,
             latin_name TEXT,
+            image_path TEXT,
             date_acquired DATETIME
         );
         
@@ -61,8 +62,8 @@ export function initDatabase() {
 }
 
 export function insertPlant(db, plant) {
-    const insert = db.prepare('INSERT INTO PLANTS (code, name, latin_name, date_acquired) VALUES (?, ?, ?, ?)')
-    const info = insert.run(plant.code, plant.name, plant.latinName, plant.dateAquired )
+    const insert = db.prepare('INSERT INTO PLANTS (code, name, latin_name, image_path, date_acquired) VALUES (?, ?, ?, ?, ?)')
+    const info = insert.run(plant.code, plant.name, plant.latinName, plant.imagePath, plant.dateAquired )
     // console.log(info.changes)
 }
 
@@ -75,13 +76,14 @@ export function insertWatering(db, watering) {
 }
 
 export function getPlantId(db, code) {
+    console.log('Getting plantID with code: ' + code)
     const stmt = db.prepare("SELECT id FROM plants WHERE code = ?")
     const plantId = stmt.get(code).id
     return plantId
 }
 
 export function getPlant(db, code) {
-    console.log(code)
+    console.log(`getPlant: ${code}`)
     const stmt = db.prepare("SELECT * FROM plants WHERE code = ?")
     const dbPlant = stmt.get(code)
 
@@ -91,8 +93,9 @@ export function getPlant(db, code) {
     }
     const plant = new Plant(
         dbPlant.code, 
-        dbPlant.name, 
-        dbPlant.latin_name, 
+        dbPlant.name,
+        dbPlant.latin_name,
+        dbPlant.image_path,
         dbPlant.date_acquired
     )
 

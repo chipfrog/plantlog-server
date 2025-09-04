@@ -14,7 +14,11 @@
         <main id="app" data-plant-code="<%= JSON.stringify(plant.code) %>">
             <div id="info-view">
                 <div id="img-container">
-                    <img id="plant-img" src="/images/monstera.jpg">
+                    <% if (plant.imagePath) { %>
+                        <img id="plant-img" src="<%= plant.imagePath %>">
+                    <% } else { %>
+                        <img id="plant-img" src="/images/plant_placeholder.png">
+                    <% } %>
                 </div>
                 <div class="info-card">
                     <ul>
