@@ -4,6 +4,7 @@ const infoView = document.getElementById("info-view")
 const careView = document.getElementById("care-view")
 
 const waterBtn = document.getElementById("water-btn")
+const waterBtnInternals = document.getElementsByClassName("water-btn-internals")[0]
 const wateredText = document.getElementById("last-watered")
 const waterRect = document.getElementById("water_rect")
 const waterSVG = document.getElementById("water-drop-svg")
@@ -43,6 +44,7 @@ async function addWatering() {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
+        showSuccessBtn()
         const updateData = await res.json()
         wateredText.innerHTML = updateData.lastWatered
 
@@ -52,8 +54,10 @@ async function addWatering() {
     }
 }
 
-function notifyWatering () {
-    
+function showSuccessBtn() {
+    waterBtn.innerText = "Plant watered!"
+    console.log(waterBtnInternals)
+    // waterBtnInternals.classList.add("success")
 }
 
 function convertYToSvgCoordinates(y) {

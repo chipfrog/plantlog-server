@@ -217,5 +217,14 @@ li {
     pointer-events: none;
 }
 
+.water-btn-internals {
+    
+    background-color: rgba(64, 153, 88, 0.8);
+}
+
+.success {
+    background-color: rgba(64, 153, 88, 0.8) !important;
+    
+}
 
 
