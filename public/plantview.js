@@ -30,7 +30,6 @@ let wateringSuccess = false
 
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
-
     try {
         const res = await fetch(url, {
             method: "POST",
@@ -45,24 +44,30 @@ async function addWatering() {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
+
+        // Update plant info view if res.ok
         const updateData = await res.json()
         wateringSuccess = true
         wateredText.innerHTML = updateData.lastWatered
-        showSuccessBtn()
 
     } catch(e) {
         console.error(e);
+        wateringSuccess = false
         alert("Failed to log watering.");
     }
+    showStatusInBtn(wateringSuccess)
 }
 
-function showSuccessBtn() {
-    waterBtn.innerText = "Plant watered!"
-    // waterBtn.style.transition = 'background-color 1s ease'
-    waterBtn.classList.add('success', 'show-result')
+function showStatusInBtn(success) {
+    if (success) {
+        waterBtn.innerText = "Plant watered!"
+        waterBtn.classList.add('success', 'show-result')
+    } else {
+        waterBtn.innerText = "Watering failed!"
+        waterBtn.classList.add('failure', 'show-result')
+    }
     setTimeout(() => {
         waterBtn.classList.remove('success', 'failure', 'filled', 'show-result')
-        // waterBtn.style.transition = 'none'
         waterBtn.innerText = "Hold to Water"
     }, 2500)
 }
@@ -75,7 +80,6 @@ function emptyWaterMeter() {
 
     if (waterSliderVal <= 0) {
         wateringSuccess = false
-        waterBtn.disabled = false
         waterBtn.classList.remove('inactive')
         waterBtn.disabled = true
     }
