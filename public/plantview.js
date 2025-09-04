@@ -58,21 +58,26 @@ async function addWatering() {
 
 function showSuccessBtn() {
     waterBtn.innerText = "Plant watered!"
-    waterBtn.classList.add('success')
+    // waterBtn.style.transition = 'background-color 1s ease'
+    waterBtn.classList.add('success', 'show-result')
     setTimeout(() => {
-        waterBtn.classList.remove('success')
+        waterBtn.classList.remove('success', 'failure', 'filled', 'show-result')
+        // waterBtn.style.transition = 'none'
         waterBtn.innerText = "Hold to Water"
     }, 2500)
-    // waterBtnInternals.classList.add("success")
 }
 
 function emptyWaterMeter() {
     waterSliderVal -= 10
     waterAmount = waterSliderVal - (waterSliderVal % 100)
     waterAmountText.innerText = `${waterAmount} ml`
+    waterBtn.classList.add('inactive')
 
     if (waterSliderVal <= 0) {
         wateringSuccess = false
+        waterBtn.disabled = false
+        waterBtn.classList.remove('inactive')
+        waterBtn.disabled = true
     }
 }
 
@@ -132,6 +137,10 @@ waterBtn.addEventListener('transitionend', (e) => {
     const style = getComputedStyle(waterBtn, '::before')
     if (waterAmount > 0 && parseInt(style.width) > 0) {
         addWatering()
+        waterBtn.classList.add('filled')
+        // waterBtn.style.transition = 'none'
+        // waterBtn.classList.remove('filled')
+        // waterBtn.style.transition = 'background-color 1s ease;'
     }
 })
 

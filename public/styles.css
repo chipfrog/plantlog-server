@@ -195,8 +195,8 @@ li {
     cursor: pointer;
     overflow: hidden;
     background-color: rgba(0, 0, 0, 0);
+    border: 1px solid gray;
     transition: background-color 1s ease;
-    border: 1px solid lightseagreen;
 }
 
 #water-btn::before {
@@ -206,7 +206,7 @@ li {
     left: 0;
     width: 0;
     height: 100%;
-    background: cyan;
+    background: rgba(0, 135, 193, 0.8);
     transition: width 1s ease;
     z-index: -1;
 }
@@ -219,8 +219,27 @@ li {
     pointer-events: none;
 }
 
+#water-btn.filled::before {
+    width: 100%;
+}
+
+#water-btn.show-result::before {
+    width: 0 !important;
+    transition: none !important;
+}
+
 #water-btn.success {
     background-color: rgba(64, 153, 88, 1);
+    color: white;
+}
+
+#water-btn.failure {
+    background-color: rgb(237, 81, 85, 1);
+    color: white;
+}
+
+#water-btn.inactive {
+    pointer-events: none;
 }
 
 
