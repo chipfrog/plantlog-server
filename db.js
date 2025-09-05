@@ -31,7 +31,7 @@ export function initDatabase() {
             plant_id INTEGER NOT NULL,
             watered_at DATETIME NOT NULL,
             method TEXT NOT NULL,
-            amount_ml INTEGER,
+            amount TEXT,
             notes TEXT,
             FOREIGN KEY (plant_id) REFERENCES plants(id)
                 ON DELETE CASCADE
@@ -69,8 +69,8 @@ export function insertPlant(db, plant) {
 
 export function insertWatering(db, watering) {
     const plantId = getPlantId(db, watering.plantCode)
-    const stmt = db.prepare('INSERT INTO WATERINGS (plant_id, watered_at, method, amount_ml) VALUES (?, ?, ?, ?)')
-    const info = stmt.run(plantId, watering.wateredAt, watering.method, watering.amountMl)
+    const stmt = db.prepare('INSERT INTO WATERINGS (plant_id, watered_at, method, amount) VALUES (?, ?, ?, ?)')
+    const info = stmt.run(plantId, watering.wateredAt, watering.method, watering.amount)
     const waterings = getWaterings(db, watering.plantCode)
     return waterings
 }

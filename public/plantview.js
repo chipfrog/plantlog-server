@@ -13,16 +13,11 @@ const waterAmountText = document.getElementById("water-amount")
 const toggleViewBtn = document.getElementById("toggle-view-btn")
 const closeWaterViewBtn = document.getElementById("close-water-btn")
 
-const wateringTypeSelect = document.getElementById("watering-types")
 const unitTypeSelect = document.getElementById("unit-types")
+const wateringTypeSelect = document.getElementById("watering-types")
 
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
 
-const WateringType = {
-   top: "Top Watering",
-   bottom: "Bottom Watering",
-   mist: "Misting"
-}
 const waterAmountDesc = {
     xxs: "Nothing",
     xs: "Sprinkle",
@@ -36,7 +31,9 @@ const waterAmountDesc = {
 const waterMax = 2000
 const waterMin = 0
 
-let unit = "ml"
+let waterUnit = unitTypeSelect.value
+let waterMethod = wateringTypeSelect.value
+let waterDesc = waterAmountDesc.xxs
 
 let dragging = false
 let waterAmount = 0 // send to db, 100 ml accuracy
@@ -45,15 +42,13 @@ let wateringSuccess = false
 
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
+    const payload = getPayload()
+
     try {
         const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                plantCode: plantCode,
-                amountMl: waterAmount,
-                method: WateringType.top
-            })
+            body: JSON.stringify(payload)
         })
         if (!res.ok) {
             const err = await res.json().catch(() => ({}))
@@ -71,6 +66,21 @@ async function addWatering() {
         alert("Failed to log watering.");
     }
     showStatusInBtn(wateringSuccess)
+}
+
+function getPayload() {
+    let payload = {
+        plantCode: plantCode,
+        method: waterMethod,
+    }
+
+    if (waterUnit === 'approximate') {
+        payload.amount = waterDesc
+    } else {
+        payload.amount = waterAmount
+    }
+    
+    return payload
 }
 
 function showStatusInBtn(success) {
@@ -113,33 +123,35 @@ function convertYToSvgCoordinates(y) {
         temp = waterMin
     }
 
-    console.log(temp)
     waterSliderVal = temp
     waterAmount = temp - (temp % 100)
-    if (unit === 'approximate') {
+
+    if (waterUnit === 'approximate') {
         convertMlToDescription(temp)
     } else {
         waterAmountText.innerText = `${waterAmount} ml`
     }
+
     toggleWaterBtnActivity()
 }
 
 function convertMlToDescription(ml) {
     if (ml <= 0) {
-        waterAmountText.innerText = waterAmountDesc.xxs
+        waterDesc = waterAmountDesc.xxs
     } else if (ml > 0 && ml <= 300) {
-        waterAmountText.innerText = waterAmountDesc.xs
+        waterDesc = waterAmountDesc.xs
     } else if (ml > 300 && ml <= 600) {
-        waterAmountText.innerText = waterAmountDesc.s
+        waterDesc = waterAmountDesc.s
     } else if (ml > 600 && ml <= 900) {
-        waterAmountText.innerText = waterAmountDesc.m
+        waterDesc = waterAmountDesc.m
     } else if (ml > 900 && ml <= 1200) {
-        waterAmountText.innerText = waterAmountDesc.l
+        waterDesc = waterAmountDesc.l
     } else if (ml > 1200 && ml <= 1500) {
-        waterAmountText.innerText = waterAmountDesc.xl
+        waterDesc = waterAmountDesc.xl
     } else if (ml > 1500) {
-        waterAmountText.innerText = waterAmountDesc.xxl
+        waterDesc = waterAmountDesc.xxl
     }
+    waterAmountText.innerText = waterDesc
 }
 
 function toggleWaterBtnActivity () {
@@ -175,8 +187,17 @@ toggleViewBtn.addEventListener('click', (e) => {
 })
 
 unitTypeSelect.addEventListener('change', (e) => {
-    unit = unitTypeSelect.value
-})  
+    waterUnit = unitTypeSelect.value
+    if (waterUnit === 'ml') {
+        waterAmountText.innerText = `${waterAmount} ml`
+    } else if (waterUnit === 'approximate') {
+        convertMlToDescription(waterAmount)
+    }
+})
+
+wateringTypeSelect.addEventListener('change', (e) => {
+    waterMethod = wateringTypeSelect.value
+})
 
 waterBtn.addEventListener('transitionend', (e) => {
     e.preventDefault()
@@ -188,7 +209,6 @@ waterBtn.addEventListener('transitionend', (e) => {
 })
 
 // Handle mouse & touch input to water slider
-
 waterSVG.addEventListener('mousedown', (e) => {
     e.preventDefault()
     dragging = true
