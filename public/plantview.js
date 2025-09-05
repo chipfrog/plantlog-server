@@ -12,6 +12,10 @@ const waterAmountText = document.getElementById("water-amount")
 
 const toggleViewBtn = document.getElementById("toggle-view-btn")
 const closeWaterViewBtn = document.getElementById("close-water-btn")
+
+const wateringTypeSelect = document.getElementById("watering-types")
+const unitTypeSelect = document.getElementById("unit-types")
+
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
 
 const WateringType = {
@@ -19,9 +23,20 @@ const WateringType = {
    bottom: "Bottom Watering",
    mist: "Misting"
 }
+const waterAmountDesc = {
+    xxs: "Nothing",
+    xs: "Sprinkle",
+    s: "Light",
+    m: "Moderate",
+    l: "Generous",
+    xl: "Soaking",
+    xxl: "Flood"
+}
 
 const waterMax = 2000
 const waterMin = 0
+
+let unit = "ml"
 
 let dragging = false
 let waterAmount = 0 // send to db, 100 ml accuracy
@@ -97,11 +112,34 @@ function convertYToSvgCoordinates(y) {
     } else if (temp <= waterMin) {
         temp = waterMin
     }
+
+    console.log(temp)
     waterSliderVal = temp
     waterAmount = temp - (temp % 100)
-    waterAmountText.innerText = `${waterAmount} ml`
-
+    if (unit === 'approximate') {
+        convertMlToDescription(temp)
+    } else {
+        waterAmountText.innerText = `${waterAmount} ml`
+    }
     toggleWaterBtnActivity()
+}
+
+function convertMlToDescription(ml) {
+    if (ml <= 0) {
+        waterAmountText.innerText = waterAmountDesc.xxs
+    } else if (ml > 0 && ml <= 300) {
+        waterAmountText.innerText = waterAmountDesc.xs
+    } else if (ml > 300 && ml <= 600) {
+        waterAmountText.innerText = waterAmountDesc.s
+    } else if (ml > 600 && ml <= 900) {
+        waterAmountText.innerText = waterAmountDesc.m
+    } else if (ml > 900 && ml <= 1200) {
+        waterAmountText.innerText = waterAmountDesc.l
+    } else if (ml > 1200 && ml <= 1500) {
+        waterAmountText.innerText = waterAmountDesc.xl
+    } else if (ml > 1500) {
+        waterAmountText.innerText = waterAmountDesc.xxl
+    }
 }
 
 function toggleWaterBtnActivity () {
@@ -136,15 +174,16 @@ toggleViewBtn.addEventListener('click', (e) => {
     careView.classList.toggle('open')
 })
 
+unitTypeSelect.addEventListener('change', (e) => {
+    unit = unitTypeSelect.value
+})  
+
 waterBtn.addEventListener('transitionend', (e) => {
     e.preventDefault()
     const style = getComputedStyle(waterBtn, '::before')
     if (waterAmount > 0 && parseInt(style.width) > 0) {
         addWatering()
         waterBtn.classList.add('filled')
-        // waterBtn.style.transition = 'none'
-        // waterBtn.classList.remove('filled')
-        // waterBtn.style.transition = 'background-color 1s ease;'
     }
 })
 
