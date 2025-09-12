@@ -9,9 +9,14 @@ export function getDatabase() {
     return db
 }
 
-export function initDatabase() {
+export function initDatabase(type) {
     if (db) return db // Makes sure only on database connection is created, if multiple calls to initDatabase()
-    db = new Database('plantlog.db')
+    if (type === 'production') {
+        db = new Database('production.db')
+    } else if (type === 'test') {
+        db = new Database('test.db')
+    }
+    
     db.exec("PRAGMA foreign_keys = ON;")
 
     console.log('intializing database...')
@@ -71,8 +76,10 @@ export function insertWatering(db, watering) {
     const plantId = getPlantId(db, watering.plantCode)
     const stmt = db.prepare('INSERT INTO WATERINGS (plant_id, watered_at, method, amount) VALUES (?, ?, ?, ?)')
     const info = stmt.run(plantId, watering.wateredAt, watering.method, watering.amount)
-    const waterings = getWaterings(db, watering.plantCode)
-    return waterings
+    if (info.changes > 0) {
+        return getWateringById(info.lastInsertRowid)
+    }
+    return false
 }
 
 export function getPlantId(db, code) {
@@ -106,13 +113,32 @@ export function getPlant(db, code) {
 
 export function getWaterings(db, code) {
     const plantId = getPlantId(db, code)
-    const stmt = db.prepare('SELECT * FROM waterings WHERE plant_id = ? ORDER BY watered_at DESC')
+    const stmt = db.prepare("SELECT * FROM waterings WHERE plant_id = ? AND method IN ('top', 'bottom') ORDER BY watered_at DESC")
     const waterings = stmt.all(plantId)
     if (waterings.length < 1) {
         console.log(`No waterings recorded for plant ${code}`)
         return null
     }
+    console.log(waterings)
     return waterings
+}
+
+function getWateringById(id) {
+    const stmt = db.prepare("SELECT * FROM waterings WHERE id = ?")
+    const watering = stmt.get(id)
+    return watering
+}
+
+export function getMistings(db, code) {
+    const plantId = getPlantId(db, code)
+    const stmt = db.prepare("SELECT * FROM waterings WHERE plant_id = ? AND method = 'mist' ORDER BY watered_at DESC")
+    const mistings = stmt.all(plantId)
+    if (mistings.length < 1) {
+        console.log(`No mistings recorded for plant ${code}`)
+        return null
+    }
+    console.log(mistings)
+    return mistings
 }
 
 export function getPlants(db) {

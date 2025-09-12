@@ -11,7 +11,8 @@ import {
     getPlantId,
     getWaterings,
     eraseAllData,
-    insertWatering
+    insertWatering,
+    getMistings
 } from './db.js'
 
 import Plant from './plant.js'
@@ -29,22 +30,27 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(express.json());
 
 // Database initialization
-initDatabase()
+let databaseType = 'test'
+
+initDatabase(databaseType)
 const db = getDatabase()
-eraseAllData(db)
 
-const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "/images/monstera.jpg", "01-06-2025")
-const p2 = new Plant("TRA-2025-01", "Juovatraakkipuu", "Dracaena deremensis", null, "01-07-2025")
-const p3 = new Plant("KAH-2025-01", "Kahvipuu", "Coffea arabica", null, null)
-const p4 = new Plant("PEI-2025-02", "Peikonlehti", "Monstera deliciosa", null, "01-06-2025")
-const p5 = new Plant("PAL-2025-01", "Palmuvehka", "Zamioculcas zamiifolia", null, "01-06-2025")
+if (databaseType === 'test') {
+    eraseAllData(db)
 
-insertPlant(db, p1)
-insertPlant(db, p2)
-insertPlant(db, p3)
-insertPlant(db, p4)
-insertPlant(db, p5)
-getPlants(db)
+    const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "/images/monstera.jpg", "01-06-2025")
+    const p2 = new Plant("TRA-2025-01", "Juovatraakkipuu", "Dracaena deremensis", null, "01-07-2025")
+    const p3 = new Plant("KAH-2025-01", "Kahvipuu", "Coffea arabica", null, null)
+    const p4 = new Plant("PEI-2025-02", "Peikonlehti", "Monstera deliciosa", null, "01-06-2025")
+    const p5 = new Plant("PAL-2025-01", "Palmuvehka", "Zamioculcas zamiifolia", null, "01-06-2025")
+
+    insertPlant(db, p1)
+    insertPlant(db, p2)
+    insertPlant(db, p3)
+    insertPlant(db, p4)
+    insertPlant(db, p5)
+    getPlants(db)
+}
 
 // Routing
 app.get('/', (req, res) => {
@@ -53,30 +59,44 @@ app.get('/', (req, res) => {
 })
 
 app.get('/plant/:code', (req, res) => {
-    console.log(`req.params.code: ${req.params.code}`)
-    const plant = getPlant(db, req.params.code)
-    const waterings = getWaterings(db, req.params.code)
-    let lastWatered = "No waterings recorded"
+    const plantCode = req.params.code
+    const plant = getPlant(db, plantCode)
+    const waterings = getWaterings(db, plantCode)
+    const mistings = getMistings(db, plantCode)
+
+    let lastMisted = "-"
+    let lastWatered = "-"
+    
     if (waterings) {
-        lastWatered =  formatDate(waterings[0].watered_at)
+        lastWatered = formatDate(waterings[0].watered_at)
     }
-    res.render('plant' , { plant, lastWatered })
+    if (mistings) {
+        lastMisted = formatDate(mistings[0].watered_at)
+    }
+
+    res.render('plant' , { plant, lastWatered, lastMisted })
 })
 
 app.post('/plant/:code/waterings', (req, res) => {
     const timeStamp = Date.now()
     const watering = req.body
+
+    console.log('watering on server')
+    console.log(watering)
     watering.wateredAt = timeStamp
-
-    console.log(req.body)
     
-    const waterings = insertWatering(db, watering)
-    let lastWatered = "No waterings"
-    if (waterings) {
-        lastWatered =  formatDate(waterings[0].watered_at)
-    }
-    res.json({ lastWatered: lastWatered })
+    let lastUpdate = "-"
+    const insertedWatering = insertWatering(db, watering)
 
+    if (insertedWatering) {
+        lastUpdate = formatDate(insertedWatering.watered_at)
+
+        if (insertedWatering.method === 'mist') {
+            res.json({ lastMisted: lastUpdate })
+        } else {
+            res.json({ lastWatered: lastUpdate })
+        }
+    }
 })
 
 app.get('/plant', (req, res) => {

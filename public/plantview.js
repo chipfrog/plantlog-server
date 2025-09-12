@@ -6,6 +6,7 @@ const careView = document.getElementById("care-view")
 const waterBtn = document.getElementById("water-btn")
 const waterBtnInternals = document.getElementsByClassName("water-btn-internals")[0]
 const wateredText = document.getElementById("last-watered")
+const mistedText = document.getElementById("last-misted")
 const waterRect = document.getElementById("water_rect")
 const waterSVG = document.getElementById("water-drop-svg")
 const waterAmountText = document.getElementById("water-amount")
@@ -58,7 +59,12 @@ async function addWatering() {
         // Update plant info view if res.ok
         const updateData = await res.json()
         wateringSuccess = true
-        wateredText.innerHTML = updateData.lastWatered
+
+        if (updateData.lastWatered) {
+            wateredText.innerHTML = updateData.lastWatered
+        } else if (updateData.lastMisted) {
+            mistedText.innerHTML = updateData.lastMisted
+        }
 
     } catch(e) {
         console.error(e);
