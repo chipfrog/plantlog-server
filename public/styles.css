@@ -260,4 +260,27 @@ li {
     background-color: var(--primary);
 }
 
+#history-view {
+    z-index: 4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color:  rgba(255, 255, 231, 0.8);
+    backdrop-filter: blur(2px);
+
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+#history-view.open {
+    transform: translateX(0);
+}
+
 

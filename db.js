@@ -141,6 +141,18 @@ export function getMistings(db, code) {
     return mistings
 }
 
+export function getAllCareActions(db, code) {
+    const plantId = getPlantId(db, code)
+    const stmt = db.prepare("SELECT * FROM waterings WHERE plant_id = ? ORDER BY watered_at DESC")
+    const actions = stmt.all(plantId)
+    if (actions.length < 1) {
+        console.log(`No care actions recorded for plant ${code}`)
+        return null
+    }
+    console.log(actions)
+    return actions
+}
+
 export function getPlants(db) {
     const getAll = db.prepare('SELECT * FROM plants')
     const plants = getAll.all()

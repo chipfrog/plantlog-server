@@ -12,7 +12,8 @@ import {
     getWaterings,
     eraseAllData,
     insertWatering,
-    getMistings
+    getMistings,
+    getAllCareActions
 } from './db.js'
 
 import Plant from './plant.js'
@@ -63,18 +64,30 @@ app.get('/plant/:code', (req, res) => {
     const plant = getPlant(db, plantCode)
     const waterings = getWaterings(db, plantCode)
     const mistings = getMistings(db, plantCode)
+    const careActions = getAllCareActions(db, plantCode)
 
     let lastMisted = "-"
     let lastWatered = "-"
     
     if (waterings) {
-        lastWatered = formatDate(waterings[0].watered_at)
+        lastWatered = formatDate(waterings[0].watered_at).date
     }
     if (mistings) {
-        lastMisted = formatDate(mistings[0].watered_at)
+        lastMisted = formatDate(mistings[0].watered_at).date
     }
 
-    res.render('plant' , { plant, lastWatered, lastMisted })
+    if (careActions) {
+        for (const c of careActions) {
+            const dateTime = formatDate(c.watered_at)
+            const date = dateTime.date
+            const time = dateTime.time
+            
+            c.date = date
+            c.time = time     
+        }
+    }
+
+    res.render('plant' , { plant, lastWatered, lastMisted, careActions })
 })
 
 app.post('/plant/:code/waterings', (req, res) => {
@@ -89,7 +102,7 @@ app.post('/plant/:code/waterings', (req, res) => {
     const insertedWatering = insertWatering(db, watering)
 
     if (insertedWatering) {
-        lastUpdate = formatDate(insertedWatering.watered_at)
+        lastUpdate = formatDate(insertedWatering.watered_at).date
 
         if (insertedWatering.method === 'mist') {
             res.json({ lastMisted: lastUpdate })

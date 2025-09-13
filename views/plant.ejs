@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="/styles.css">
     </head>
     <body>
-        <main id="app" data-plant-code="<%= JSON.stringify(plant.code) %>">
+        <main id="app" data-plant-code="<%= JSON.stringify(plant.code) %>" data-care-actions='<%- JSON.stringify(careActions) %>'>
             <div id="info-view">
                 <div id="img-container">
                     <% if (plant.imagePath) { %>
@@ -79,7 +79,35 @@
                     </button>
                 </div>
             </div>
+            <div id="history-view">
+                <div id="top-row">
+                    <div></div>
+                    <h1>Care History</h1>
+                    <button id="close-history-btn" class="round-btn">
+                        <img class="icon" src="/icons/arrow_forward.svg">
+                    </button>
+                </div>
+                <div id="actionList"></div>
+            </div>
+            
+            <template id="history-item-template">
+                <div class="history-item">
+                    <h3 class="care-action-name"></h3>
+                    <p class="care-action-timestamp"></p>
+                </div>
+            </template>
         </main>
+        <script>
+            const actions = <%- JSON.stringify(careActions) %>;
+            const container = document.getElementById('actionList')
+            const template = document.getElementById('history-item-template');
+
+            actions.forEach(a => {
+                const clone = template.content.cloneNode(true)
+                clone.querySelector('.care-action-name').textContent = a.time
+                container.appendChild(clone)
+            })
+        </script>
         <script src="/plantview.js" type="module" defer></script>
     </body>
 </html>

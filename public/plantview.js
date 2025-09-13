@@ -2,6 +2,7 @@ const mainApp = document.getElementById("app")
 
 const infoView = document.getElementById("info-view")
 const careView = document.getElementById("care-view")
+const historyView = document.getElementById("history-view")
 
 const waterBtn = document.getElementById("water-btn")
 const waterBtnInternals = document.getElementsByClassName("water-btn-internals")[0]
@@ -14,10 +15,14 @@ const waterAmountText = document.getElementById("water-amount")
 const toggleViewBtn = document.getElementById("toggle-view-btn")
 const closeWaterViewBtn = document.getElementById("close-water-btn")
 
+const timelineBtn = document.getElementById("timeline-btn")
+const closeTimelineViewBtn = document.getElementById("close-history-btn")
+
 const unitTypeSelect = document.getElementById("unit-types")
 const wateringTypeSelect = document.getElementById("watering-types")
 
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
+const careActions = JSON.parse(mainApp.dataset.careActions)
 
 const waterAmountDesc = {
     xxs: "Nothing",
@@ -58,6 +63,7 @@ async function addWatering() {
 
         // Update plant info view if res.ok
         const updateData = await res.json()
+        console.log(updateData)
         wateringSuccess = true
 
         if (updateData.lastWatered) {
@@ -65,6 +71,8 @@ async function addWatering() {
         } else if (updateData.lastMisted) {
             mistedText.innerHTML = updateData.lastMisted
         }
+
+
 
     } catch(e) {
         console.error(e);
@@ -190,6 +198,16 @@ closeWaterViewBtn.addEventListener('click', (e) => {
 toggleViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
     careView.classList.toggle('open')
+})
+
+timelineBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    historyView.classList.toggle('open')
+})
+
+closeTimelineViewBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    historyView.classList.toggle('open')
 })
 
 unitTypeSelect.addEventListener('change', (e) => {
