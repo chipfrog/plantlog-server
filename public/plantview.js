@@ -12,6 +12,9 @@ const waterRect = document.getElementById("water_rect")
 const waterSVG = document.getElementById("water-drop-svg")
 const waterAmountText = document.getElementById("water-amount")
 
+const actionList = document.getElementById("action-list")
+const historyItemTemplate = document.getElementById("history-item-template")
+
 const toggleViewBtn = document.getElementById("toggle-view-btn")
 const closeWaterViewBtn = document.getElementById("close-water-btn")
 
@@ -66,13 +69,13 @@ async function addWatering() {
         console.log(updateData)
         wateringSuccess = true
 
-        if (updateData.lastWatered) {
-            wateredText.innerHTML = updateData.lastWatered
-        } else if (updateData.lastMisted) {
-            mistedText.innerHTML = updateData.lastMisted
+        if (updateData.type == 'water') {
+            wateredText.innerHTML = updateData.watering.watered_at
+            addHistoryEntry(updateData)
+        } else if (updateData.type == 'mist') {
+            mistedText.innerHTML = updateData.watering.watered_at
+            addHistoryEntry(updateData)
         }
-
-
 
     } catch(e) {
         console.error(e);
@@ -80,6 +83,13 @@ async function addWatering() {
         alert("Failed to log watering.");
     }
     showStatusInBtn(wateringSuccess)
+}
+
+function addHistoryEntry(update) {
+    const instance = historyItemTemplate.content.cloneNode(true)
+    instance.querySelector('.care-action-name').textContent = update.watering.method
+    instance.querySelector('.care-action-timestamp').textContent = update.watering.watered_at
+    actionList.appendChild(instance)
 }
 
 function getPayload() {

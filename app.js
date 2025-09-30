@@ -100,14 +100,18 @@ app.post('/plant/:code/waterings', (req, res) => {
     
     let lastUpdate = "-"
     const insertedWatering = insertWatering(db, watering)
+    console.log('insertedWatering:')
+    console.log(insertedWatering)
 
     if (insertedWatering) {
-        lastUpdate = formatDate(insertedWatering.watered_at).date
+        console.log('date:' + formatDate(insertedWatering.wateredAt).date)
+        insertedWatering.watered_at = formatDate(insertedWatering.watered_at).date
+        
 
         if (insertedWatering.method === 'mist') {
-            res.json({ lastMisted: lastUpdate })
+            res.json({ watering: insertedWatering, type: 'mist' })
         } else {
-            res.json({ lastWatered: lastUpdate })
+            res.json({ watering: insertedWatering, type: 'water' })
         }
     }
 })
