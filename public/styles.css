@@ -268,10 +268,10 @@ li {
     height: 100%;
     width: 100%;
     
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
     background-color:  rgba(255, 255, 231, 0.8);
     backdrop-filter: blur(2px);
 
@@ -279,8 +279,26 @@ li {
     transition: transform 0.3s ease;
 }
 
+.care-top-row {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 #history-view.open {
     transform: translateX(0);
+}
+
+#action-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    max-height: 100%;
+    width: 100%;
+    overflow-y: auto;
 }
 
 
