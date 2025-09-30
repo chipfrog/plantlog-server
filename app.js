@@ -82,6 +82,7 @@ app.get('/plant/:code', (req, res) => {
             const date = dateTime.date
             const time = dateTime.time
             
+            
             c.date = date
             c.time = time     
         }
@@ -104,9 +105,11 @@ app.post('/plant/:code/waterings', (req, res) => {
     console.log(insertedWatering)
 
     if (insertedWatering) {
-        console.log('date:' + formatDate(insertedWatering.wateredAt).date)
-        insertedWatering.watered_at = formatDate(insertedWatering.watered_at).date
-        
+        const dateTime = formatDate(insertedWatering.watered_at)
+        const date = dateTime.date
+        const time = dateTime.time
+        insertedWatering.date = date
+        insertedWatering.time = time    
 
         if (insertedWatering.method === 'mist') {
             res.json({ watering: insertedWatering, type: 'mist' })

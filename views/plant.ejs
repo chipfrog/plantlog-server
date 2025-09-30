@@ -99,12 +99,13 @@
         </main>
         <script>
             const actions = <%- JSON.stringify(careActions) %>;
-            const container = document.getElementById('actionList')
+            const container = document.getElementById('action-list')
             const template = document.getElementById('history-item-template');
 
             actions.forEach(a => {
                 const clone = template.content.cloneNode(true)
-                clone.querySelector('.care-action-name').textContent = a.time
+                clone.querySelector('.care-action-name').textContent = a.method
+                clone.querySelector('.care-action-timestamp').textContent = a.time
                 container.appendChild(clone)
             })
         </script>

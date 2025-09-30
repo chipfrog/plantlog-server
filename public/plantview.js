@@ -70,10 +70,10 @@ async function addWatering() {
         wateringSuccess = true
 
         if (updateData.type == 'water') {
-            wateredText.innerHTML = updateData.watering.watered_at
+            wateredText.innerHTML = updateData.watering.time
             addHistoryEntry(updateData)
         } else if (updateData.type == 'mist') {
-            mistedText.innerHTML = updateData.watering.watered_at
+            mistedText.innerHTML = updateData.watering.time
             addHistoryEntry(updateData)
         }
 
@@ -86,10 +86,13 @@ async function addWatering() {
 }
 
 function addHistoryEntry(update) {
+    console.log('adding history entry')
+    console.log(update)
     const instance = historyItemTemplate.content.cloneNode(true)
     instance.querySelector('.care-action-name').textContent = update.watering.method
-    instance.querySelector('.care-action-timestamp').textContent = update.watering.watered_at
-    actionList.appendChild(instance)
+    instance.querySelector('.care-action-timestamp').textContent = update.watering.time
+    console.log(instance)
+    actionList.prepend(instance)
 }
 
 function getPayload() {
