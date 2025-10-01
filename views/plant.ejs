@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Plant Log</title>
         <div id="header">
-            <h1 id="primary-title"><%= plant.name %></h1>
-            <h4 id="secondary-title"><i id="label"><%= plant.latinName %></i></h4>
+            <!-- <h1 id="primary-title"><%= plant.name %></h1> -->
+            <!-- <h4 id="secondary-title"><i id="label"><%= plant.latinName %></i></h4> -->
         </div>
         <link rel="stylesheet" href="/styles.css">
     </head>
@@ -20,12 +20,26 @@
                         <img id="plant-img" src="/images/plant_placeholder.png">
                     <% } %>
                 </div>
-                <div class="info-card">
-                    <ul>
-                        <li>Watered: <span id="last-watered" class="pill" ><%= lastWatered %></span></li>
-                        <li>Fertilized:  <span class="pill">-</span></li>
-                        <li>Misted: <span id="last-misted" class="pill"><%= lastMisted %></span></li>
-                    </ul>
+                <div class="info-data-container">
+                    <div class="info-card">
+                        <h2 id="info-title"><%= plant.name %></h2>
+                        <div class="info-left">
+                            <ul>
+                                <li class="info-row">
+                                    <img class="icon" src="/icons/water_drop.svg" >
+                                    <span id="last-watered" class="pill" ><%= lastWatered %></span>
+                                </li>
+                                <li class="info-row">
+                                    <img class="icon" src="/icons/spray.svg">
+                                    <span id="last-misted" class="pill"><%= lastMisted %></span>
+                                </li>
+                                <li class="info-row">
+                                    <img class="icon" src="/icons/tractor.svg">
+                                    <span class="pill">-</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div id="btn-row-bottom">
                     <button id="timeline-btn" class="round-btn">
@@ -94,13 +108,14 @@
                 <div class="history-item">
                     <h3 class="care-action-name"></h3>
                     <p class="care-action-timestamp"></p>
+                    <p class="water-amount"></p>
                 </div>
             </template>
         </main>
         <script>
             const actions = <%- JSON.stringify(careActions) %>;
             const container = document.getElementById('action-list')
-            const template = document.getElementById('history-item-template');
+            const template = document.getElementById('history-item-template')
 
             actions.forEach(a => {
                 const clone = template.content.cloneNode(true)
