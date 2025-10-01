@@ -339,4 +339,13 @@ li {
     overflow-y: auto;
 }
 
+.progress-bar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: 
+        radial-gradient(closest-side, var(--surface) 79%, transparent 80% 100%),
+        conic-gradient(var(--surface) 80deg,hotpink 80deg 120deg, pink 120deg 360deg);
+    transform: rotate(140deg);
+}
 
