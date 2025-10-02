@@ -17,13 +17,26 @@
                     <% if (plant.imagePath) { %>
                         <img id="plant-img" src="<%= plant.imagePath %>">
                     <% } else { %>
-                        <img id="plant-img" src="/images/plant_placeholder.png">
+                        <img id="plant-img" src="/images/monstera_logo.png">
                     <% } %>
                 </div>
                 <div class="info-data-container">
                     <div class="info-card">
                         <h2 id="info-title"><%= plant.name %></h2>
-                        <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="2000"></div>
+                        <div class="progress-container">
+                            <div class="progress-bar water" role="progressbar"></div>  
+                            <img class="progress-icon" src="/icons/water_drop.svg">    
+                        </div>
+                        <div id="info-lower-half">
+                            <div class="progress-container">
+                                <div class="progress-bar mist" role="progressbar"></div>
+                                <img class="progress-icon" src="/icons/spray.svg">
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar fertilizer" role="progressbar"></div>
+                                <img class="progress-icon" src="/icons/tractor.svg">
+                            </div>
+                        </div>
                         <!-- <div class="info-left">
                             <ul>
                                 <li class="info-row">
