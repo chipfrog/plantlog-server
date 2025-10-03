@@ -22,13 +22,14 @@
                 </div>
                 <div class="info-data-container">
                     <div class="info-card">
-                        <h2 id="info-title"><%= plant.name %></h2>
+                        <!-- <h2 id="info-title"><%= plant.name %></h2> -->
                         <div class="progress-container">
+                            <div></div>
                             <div class="progress-bar water" role="progressbar"></div>
                             <img class="progress-icon" src="/icons/water_drop.svg">
                             <div class="progress-info-list">
-                                <div>text_1</div>
-                                <div>text_2</div>
+                                <div id="last-watered"><%= lastWatered %></div>
+                                <div>4 days ago</div>
                             </div>
                         </div>
                         <div id="info-lower-half">
@@ -36,7 +37,7 @@
                                 <div class="progress-bar mist" role="progressbar"></div>
                                 <img class="progress-icon" src="/icons/spray.svg">
                                 <div class="progress-info-list">
-                                    <div>text_1</div>
+                                    <div id="last-misted"><%= lastMisted %></div>
                                     <div>text_2</div>
                                 </div>
                             </div>
@@ -44,7 +45,7 @@
                                 <div class="progress-bar fertilizer" role="progressbar"></div>
                                 <img class="progress-icon" src="/icons/tractor.svg">
                                 <div class="progress-info-list">
-                                    <div>text_1</div>
+                                    <div>-</div>
                                     <div>text_2</div>
                                 </div>
                             </div>
