@@ -21,75 +21,38 @@
                     <% } %>
                 </div>
                 <div class="info-data-container">
-                        <!-- <h2 id="info-title"><%= plant.name %></h2> -->
+                    <h2 id="info-title"><%= plant.name %></h2>
 
-                        <!-- <div class="progress-container">
-                            <div></div>
+                    <div style="display: flex; align-items: center; padding-top: 2.5rem;">
+                        <div style="position: absolute; left: 50%; transform: translateX(-50%);">
                             <div class="progress-bar water" role="progressbar"></div>
-                            <img class="progress-icon" src="/icons/water_drop.svg">
-                            <div class="progress-info-list">
-                                <div id="last-watered"><%= lastWatered %></div>
-                                <div>4 days ago</div>
-                            </div>
-                        </div> -->
-                        <div style="display: flex; align-items: center; padding-top: 2.5rem;">
-                            <div style="position: absolute; left: 50%; transform: translateX(-50%);">
-                                <div class="progress-bar water" role="progressbar"></div>
-                            </div>
-                            <img src="/icons/water_drop.svg" style="position: absolute; left: 50%; transform: translateX(-50%);">
-                            <div style="position: absolute; left: calc(50% + 35px); display: flex; flex-direction: column; align-items: start; margin-left: 0.5rem;">
-                                <div>12 days ago</div>
-                                <div>12.05.2025</div>
-                            </div>
-                            <div style="position: absolute; left: 50%; transform: translateX(-50%); margin-top: 5rem;">
-                                Moderate
-                            </div>
                         </div>
-                        
+                        <img src="/icons/water_drop.svg" style="position: absolute; left: 50%; transform: translateX(-50%);">
+                        <div style="position: absolute; left: 50%; transform: translateX(-50%); margin-top: 6rem;">
+                            <div>Generous</div>
+                            <div style="font-size: small;">5 days ago</div>
+                        </div>
+                    </div>
 
-                        <!-- <br>
-                        <br>
-                        <br>
-                        <br>
+                    <div style="display: flex; align-items: center; padding-top: 6rem;">
+                        <div style="position: absolute; left: 90px;">
+                            <div class="progress-bar water" role="progressbar"></div>
+                        </div>
+                        <img src="/icons/spray.svg" style="position: absolute; left: 125px; transform: translateX(-50%);">
+                        <div style="position: absolute; left: 125px; transform: translateX(-50%); margin-top: 6rem;">
+                            <div>Generous</div>
+                            <div style="font-size: small;">5 days ago</div>
+                        </div>
 
-                        <div id="info-lower-half">
-                            <div class="progress-container">
-                                <div class="progress-bar mist" role="progressbar"></div>
-                                <img class="progress-icon" src="/icons/spray.svg">
-                                <div class="progress-info-list">
-                                    <div id="last-misted"><%= lastMisted %></div>
-                                    <div>text_2</div>
-                                </div>
-                            </div>
-                            <div class="progress-container">
-                                <div class="progress-bar fertilizer" role="progressbar"></div>
-                                <img class="progress-icon" src="/icons/tractor.svg">
-                                <div class="progress-info-list">
-                                    <div>-</div>
-                                    <div>text_2</div>
-                                </div>
-                            </div>
-                        </div> -->
-                        <!-- <div class="info-left">
-                            <ul>
-                                <li class="info-row">
-                                    <img class="icon" src="/icons/water_drop.svg" >
-                                    <span id="last-watered" class="pill" ><%= lastWatered %></span>
-                                </li>
-                                <li class="info-row">
-                                    <img class="icon" src="/icons/spray.svg">
-                                    <span id="last-misted" class="pill"><%= lastMisted %></span>
-                                </li>
-                                <li class="info-row">
-                                    <img class="icon" src="/icons/tractor.svg">
-                                    <span class="pill">-</span>
-                                </li>
-                            </ul>
-                            <div class="circular-meter-container">
-                                <div class="circular-meter-fill"></div>
-                                <span class="meter-percentage">0%</span>
-                            </div>
-                        </div> -->
+                        <div style="position: absolute; right: 90px;">
+                            <div class="progress-bar water" role="progressbar"></div>
+                        </div>
+                        <img src="/icons/tractor.svg" style="position: absolute; right: 125px; transform: translateX(50%);">
+                        <div style="position: absolute; right: 125px; transform: translateX(50%); margin-top: 6rem;">
+                            <div>Generous</div>
+                            <div style="font-size: small;">5 days ago</div>
+                        </div>
+                    </div>
                 </div>
                 <div id="btn-row-bottom">
                     <button id="timeline-btn" class="round-btn">
