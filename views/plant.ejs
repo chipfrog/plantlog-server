@@ -4,10 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Plant Log</title>
-        <div id="header">
-            <!-- <h1 id="primary-title"><%= plant.name %></h1> -->
-            <!-- <h4 id="secondary-title"><i id="label"><%= plant.latinName %></i></h4> -->
-        </div>
         <link rel="stylesheet" href="/styles.css">
     </head>
     <body>
@@ -21,47 +17,45 @@
                     <% } %>
                 </div>
                 <div class="info-data-container">
-                    <h2 id="info-title"><%= plant.name %></h2>
+                    <div id="info-titles">
+                        <h2 class="title"><%= plant.name %></h2>
+                        <i class="secondary-title"><%= plant.latinName %></i>
+                    </div>
 
-                    <div style="display: flex; align-items: center; padding-top: 2.5rem;">
-                        <div style="position: absolute; left: 50%; transform: translateX(-50%);">
-                            <div class="progress-bar water" role="progressbar"></div>
+                    <div style="display: flex; align-items: center; justify-content: space-evenly;  padding-top: 0.5rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="progress-bar mist" role="progressbar">
+                                <img src="/icons/spray.svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-140deg);">
+                            </div>
+                            <div>Flood</div>
+                            <div style="font-size: small;">21 days ago</div>
                         </div>
-                        <img src="/icons/water_drop.svg" style="position: absolute; left: 50%; transform: translateX(-50%);">
-                        <div style="position: absolute; left: 50%; transform: translateX(-50%); margin-top: 6rem;">
+
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="progress-bar water" role="progressbar">
+                                <img src="/icons/water_drop.svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-140deg);">
+                            </div>
                             <div>Generous</div>
-                            <div style="font-size: small;">5 days ago</div>
+                            <div style="font-size: small;">51 days ago</div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="progress-bar mist" role="progressbar">
+                                <img src="/icons/spray.svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-140deg);">
+                            </div>
+                            <div>Generous</div>
+                            <div style="font-size: small;">52 days ago</div>
                         </div>
                     </div>
 
-                    <div style="display: flex; align-items: center; padding-top: 6rem;">
-                        <div style="position: absolute; left: 90px;">
-                            <div class="progress-bar water" role="progressbar"></div>
-                        </div>
-                        <img src="/icons/spray.svg" style="position: absolute; left: 125px; transform: translateX(-50%);">
-                        <div style="position: absolute; left: 125px; transform: translateX(-50%); margin-top: 6rem;">
-                            <div>Generous</div>
-                            <div style="font-size: small;">5 days ago</div>
-                        </div>
-
-                        <div style="position: absolute; right: 90px;">
-                            <div class="progress-bar water" role="progressbar"></div>
-                        </div>
-                        <img src="/icons/tractor.svg" style="position: absolute; right: 125px; transform: translateX(50%);">
-                        <div style="position: absolute; right: 125px; transform: translateX(50%); margin-top: 6rem;">
-                            <div>Generous</div>
-                            <div style="font-size: small;">5 days ago</div>
-                        </div>
+                    <div id="btn-row-bottom">
+                        <button id="timeline-btn" class="round-btn">
+                            <img class="icon" src="/icons/timeline.svg">
+                        </button>
+                        <button id="toggle-view-btn" class="round-btn">
+                            <img class="icon" src="/icons/potted_plant.svg">
+                        </button>
                     </div>
-                </div>
-                <div id="btn-row-bottom">
-                    <button id="timeline-btn" class="round-btn">
-                        <img class="icon" src="/icons/timeline.svg">
-                    </button>
-                    <button id="toggle-view-btn" class="round-btn">
-                        <img class="icon" src="/icons/potted_plant.svg">
-                    </button>
-                
                 </div>
             </div>
             <div id="care-view">
