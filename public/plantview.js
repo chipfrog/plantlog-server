@@ -12,6 +12,10 @@ const waterRect = document.getElementById("water_rect")
 const waterSVG = document.getElementById("water-drop-svg")
 const waterAmountText = document.getElementById("water-amount")
 
+const showerSVG = document.getElementById("shower-icon")
+const glassSVG = document.getElementById("glass-icon")
+const spraySVG = document.getElementById("spray-icon")
+
 const actionList = document.getElementById("action-list")
 const historyItemTemplate = document.getElementById("history-item-template")
 
@@ -39,8 +43,17 @@ const waterAmountDesc = {
     xxl: "Flood"
 }
 
+const wateringType = {
+    none: 'none',
+    top: 'top',
+    bottom: 'bottom',
+    mist: 'mist'
+}
+
 const waterMax = 2000
 const waterMin = 0
+
+let activeWateringType = wateringType.none
 
 let waterUnit = 'ml'
 
@@ -235,8 +248,6 @@ closeTimelineViewBtn.addEventListener('click', (e) => {
 unitTypeBtn.addEventListener('click', (e) => {
     iconRotation += 180
     cycleIcon.style.transform = `translate(-50%,-50%) rotate(${iconRotation}deg)`
-    // cycleIcon.classList.add('spin')
-    // setTimeout(() => cycleIcon.classList.remove('spin'), 500)
 
     if (waterUnit === 'ml') {
         waterUnit = 'approximate'
@@ -248,6 +259,44 @@ unitTypeBtn.addEventListener('click', (e) => {
         waterAmountText.innerText = `${waterAmount} ml`
     }
 })
+
+showerSVG.addEventListener('click', (e) => {
+    if (activeWateringType === wateringType.top) {
+        activeWateringType = wateringType.none
+        showerSVG.setAttribute('fill', 'darkgray')
+    } else {
+        activeWateringType = wateringType.top
+        showerSVG.setAttribute('fill', 'black')
+        glassSVG.setAttribute('fill', 'darkgray')
+        spraySVG.setAttribute('fill', 'darkgray')
+    }
+})
+
+glassSVG.addEventListener('click', (e) => {
+    if (activeWateringType === wateringType.bottom) {
+        activeWateringType = wateringType.none
+        glassSVG.setAttribute('fill', 'darkgray')
+    } else {
+        activeWateringType = wateringType.bottom
+        showerSVG.setAttribute('fill', 'darkgray')
+        glassSVG.setAttribute('fill', 'black')
+        spraySVG.setAttribute('fill', 'darkgray')
+    }
+})
+
+spraySVG.addEventListener('click', (e) => {
+    if (activeWateringType === wateringType.mist) {
+        activeWateringType = wateringType.none
+        spraySVG.setAttribute('fill', 'darkgray')
+    } else {
+        activeWateringType = wateringType.mist
+        showerSVG.setAttribute('fill', 'darkgray')
+        glassSVG.setAttribute('fill', 'darkgray')
+        spraySVG.setAttribute('fill', 'black')
+    }
+})
+
+
 
 
 

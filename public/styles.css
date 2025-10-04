@@ -234,6 +234,20 @@ li {
     -webkit-tap-highlight-color: transparent;
 }
 
+#water-type {
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.water-type-icon {
+    height: 45px;
+}
+
 .water-options {
     position: relative;
     width: 100%;
@@ -251,9 +265,9 @@ li {
     font-size: xx-large;
 }
 
-.round-btn-new {
+#unit-types {
     position: absolute;
-    left: calc(50% + 80px);
+    left: calc(50% + 90px);
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -266,7 +280,7 @@ li {
     top: 50%; 
     left: 50%; 
     transform: translate(-50%,-50%);
-    transition: transform .7s;
+    transition: transform .5s ease;
 }
 
 #water-btn-row {
