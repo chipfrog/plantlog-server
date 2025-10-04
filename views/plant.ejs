@@ -16,37 +16,38 @@
                         <img id="plant-img" src="/images/monstera_logo.png">
                     <% } %>
                 </div>
-                <div style="height: 50dvh;">
+                <div class="info-bottom-half">
                     <div class="info-data-container">
                         <div id="info-titles">
                             <h2 class="title"><%= plant.name %></h2>
                             <i class="secondary-title"><%= plant.latinName %></i>
                         </div>
 
-                        <div style="display: flex; align-items: center; justify-content: space-evenly;  padding-top: 0.5rem;">
-                            <div style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="progress-bar-row-container">
+                            <div class="progress-bar-container">
                                 <div class="progress-bar mist" role="progressbar">
-                                    <img src="/icons/spray.svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-140deg);">
+                                    <img class="progress-bar-icon" src="/icons/spray.svg">
                                 </div>
                                 <div>Flood</div>
                                 <div style="font-size: small;">21 days ago</div>
                             </div>
 
-                            <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="progress-bar-container">
                                 <div class="progress-bar water" role="progressbar">
-                                    <img src="/icons/water_drop.svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-140deg);">
+                                    <img class="progress-bar-icon" src="/icons/water_drop.svg">
                                 </div>
                                 <div>Generous</div>
                                 <div style="font-size: small;">51 days ago</div>
                             </div>
 
-                            <div style="display: flex; flex-direction: column; align-items: center;">
-                                <div class="progress-bar mist" role="progressbar">
-                                    <img src="/icons/spray.svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-140deg);">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar fertilizer" role="progressbar">
+                                    <img class="progress-bar-icon" src="/icons/tractor.svg">
                                 </div>
                                 <div>Generous</div>
                                 <div style="font-size: small;">52 days ago</div>
                             </div>
+
                         </div>
                     </div>
                     <div id="btn-row-bottom">
