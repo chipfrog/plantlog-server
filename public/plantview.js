@@ -211,7 +211,7 @@ closeWaterViewBtn.addEventListener('click', (e) => {
 
 toggleViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
-    careView.classList.toggle('open')
+    // careView.classList.toggle('open')
 })
 
 timelineBtn.addEventListener('click', (e) => {

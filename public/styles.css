@@ -1,16 +1,18 @@
 :root {
-    --bg: 	 	#dce3c7;
+    --bg: #a9ad9b;
     --text: ;
-    --surface: #f7fff7;
+    --surface: #f5f0e7;
     --border: #053034;
     --primary: #99a98f;
     --muted: ;
     --label: #fefae0;
     --overlay: #fefae0;
+    --secondary-surface: #dce3c7;
 
     --water-progress: 120deg;
     --mist-progress: 270deg;
     --fertilizer-progress: 225deg;
+
 }
 
 @font-face {
@@ -69,7 +71,6 @@ button {
 }
 
 #img-container {
-    /* width: 100%; */
     height: 50dvh;
     margin: 0.5rem;
 }
@@ -79,7 +80,20 @@ button {
     height: 100%;
     border-radius: 16px;
     object-fit: cover;
-    /* border-radius: 0 20rem 20rem 0; */
+}
+
+.command-bar-btn {
+    width: 100px;
+    height: 70%;
+    border-radius: 12px;
+    background-color: #96A78D;
+    box-shadow: 0 3px 0 1px black;
+    border: none;
+}
+
+.command-bar-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 1px black;
 }
 
 .round-btn {
@@ -126,7 +140,7 @@ li {
     padding-bottom: 0.7rem;
     background-color: var(--surface);
     border-radius: 12px;
-    box-shadow: 3px 3px 5px lightslategray;
+    box-shadow: 2px 2px 2px lightslategray;
 }
 
 #btn-row-bottom {
@@ -135,8 +149,9 @@ li {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid black;
     border-radius: 12px;
+    background-color: var(--secondary-surface);
+    box-shadow: 2px 2px 2px lightslategray;
 }
 
 #info-titles {
@@ -170,6 +185,18 @@ li {
     justify-content: center;
     align-items: center;
 }
+
+.custom-btn {
+
+
+}
+
+.custom-bnt:active {
+
+}
+
+
+
 
 #care-view {
     z-index: 4;
