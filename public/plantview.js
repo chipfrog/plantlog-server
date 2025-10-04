@@ -21,8 +21,10 @@ const closeWaterViewBtn = document.getElementById("close-water-btn")
 const timelineBtn = document.getElementById("timeline-btn")
 const closeTimelineViewBtn = document.getElementById("close-history-btn")
 
-const unitTypeSelect = document.getElementById("unit-types")
-const wateringTypeSelect = document.getElementById("watering-types")
+const cycleIcon = document.getElementById("cycle-icon")
+
+const unitTypeBtn = document.getElementById("unit-types")
+// const wateringTypeSelect = document.getElementById("watering-types")
 
 const plantCode = JSON.parse(mainApp.dataset.plantCode)
 const careActions = JSON.parse(mainApp.dataset.careActions)
@@ -40,8 +42,12 @@ const waterAmountDesc = {
 const waterMax = 2000
 const waterMin = 0
 
-let waterUnit = unitTypeSelect.value
-let waterMethod = wateringTypeSelect.value
+let waterUnit = 'ml'
+
+let iconRotation = 0
+
+// let waterUnit = unitTypeSelect.value
+// let waterMethod = wateringTypeSelect.value
 let waterDesc = waterAmountDesc.xxs
 
 let dragging = false
@@ -155,7 +161,8 @@ function convertYToSvgCoordinates(y) {
     waterAmount = temp - (temp % 100)
 
     if (waterUnit === 'approximate') {
-        convertMlToDescription(temp)
+        const desc = convertMlToDescription(temp)
+        waterAmountText.innerText = desc
     } else {
         waterAmountText.innerText = `${waterAmount} ml`
     }
@@ -179,7 +186,8 @@ function convertMlToDescription(ml) {
     } else if (ml > 1500) {
         waterDesc = waterAmountDesc.xxl
     }
-    waterAmountText.innerText = waterDesc
+
+    return waterDesc
 }
 
 function toggleWaterBtnActivity () {
@@ -211,7 +219,7 @@ closeWaterViewBtn.addEventListener('click', (e) => {
 
 toggleViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
-    // careView.classList.toggle('open')
+    careView.classList.toggle('open')
 })
 
 timelineBtn.addEventListener('click', (e) => {
@@ -224,18 +232,24 @@ closeTimelineViewBtn.addEventListener('click', (e) => {
     historyView.classList.toggle('open')
 })
 
-unitTypeSelect.addEventListener('change', (e) => {
-    waterUnit = unitTypeSelect.value
+unitTypeBtn.addEventListener('click', (e) => {
+    iconRotation += 180
+    cycleIcon.style.transform = `translate(-50%,-50%) rotate(${iconRotation}deg)`
+    // cycleIcon.classList.add('spin')
+    // setTimeout(() => cycleIcon.classList.remove('spin'), 500)
+
     if (waterUnit === 'ml') {
-        waterAmountText.innerText = `${waterAmount} ml`
+        waterUnit = 'approximate'
+        const desc = convertMlToDescription(waterAmount)
+        waterAmountText.innerText = desc
+        
     } else if (waterUnit === 'approximate') {
-        convertMlToDescription(waterAmount)
+        waterUnit = 'ml'
+        waterAmountText.innerText = `${waterAmount} ml`
     }
 })
 
-wateringTypeSelect.addEventListener('change', (e) => {
-    waterMethod = wateringTypeSelect.value
-})
+
 
 waterBtn.addEventListener('transitionend', (e) => {
     e.preventDefault()

@@ -61,12 +61,11 @@
                 </div>
             </div>
             <div id="care-view">
-                <div id="top-row">
+                <div id="care-top-row">
                     <button id="close-water-btn" class="round-btn">
                         <img class="icon" src="/icons/arrow_back.svg">
                     </button>
-                    <h1>Watering</h1>
-                    <div></div>
+
                 </div>
 
                 <div id="water-slider">
@@ -78,15 +77,20 @@
                                     s21-9.73,21-21.735C53,25.729,32.035,1,32.035,1
                                     S10.931,25.729,11,41.265z" fill="white"/>
                         </mask>
-                        <rect id="water_rect" x="0" y="0" width="64" height="64" fill="rgba(0, 135, 193, 0.6)" mask="url(#drop_mask)" />
+                        <rect id="water_rect" x="0" y="0" width="64" height="64" fill="rgba(0, 135, 193, 0.7)" mask="url(#drop_mask)" />
 
                         <path fill="none" stroke="#000000" stroke-width="2" stroke-miterlimit="10"
                                 d="M11,41.265C11.052,53.27,20.401,63,32,63
                                 s21-9.73,21-21.735C53,25.729,32.035,1,32.035,1
                                 S10.931,25.729,11,41.265z"/>
                     </svg>
-                    <p id="water-amount">0 ml</p>
-                    <select name="unit-types" id="unit-types" class="dropdown">
+                    <div class="water-options">
+                        <p id="water-amount">0 ml</p>
+                        <button id="unit-types" class="round-btn-new">
+                            <img id="cycle-icon" src="/icons/cycle.svg">
+                        </button>
+                    </div>
+                    <!-- <select name="unit-types" id="unit-types" class="dropdown">
                         <option value="ml" selected>Exact (ml)</option>
                         <option value="approximate">Approximate</option>
                     </select>
@@ -94,7 +98,7 @@
                         <option value="top" selected>Top watering</option>
                         <option value="bottom">Bottom watering</option>
                         <option value="mist">Misting</option>
-                    </select>
+                    </select> -->
                 </div>
                 <div id="water-btn-row">
                     <button id="water-btn" disabled>

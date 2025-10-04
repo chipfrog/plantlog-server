@@ -185,15 +185,14 @@ li {
     height: 100%;
     width: 100%;
     
-    display: flex;
+    /* display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    background-color:  #fefae0;
-    backdrop-filter: blur(2px);
-
+    align-items: center; */
+    background: rgba(109, 218, 255, 0.26);
+    backdrop-filter: blur(12px);
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.5s ease;
 }
 
 #care-view.open {
@@ -216,6 +215,11 @@ li {
 }
 
 #water-slider {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -223,14 +227,46 @@ li {
 }
 
 #water-drop-svg {
+    padding-bottom: 40px;
     overscroll-behavior: contain;
     touch-action: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
 }
 
+.water-options {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    /* justify-content: center; */
+    /* justify-content: space-evenly; */
+}
+
 #water-amount {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-size: xx-large;
+}
+
+.round-btn-new {
+    position: absolute;
+    left: calc(50% + 80px);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid black;
+}
+
+#cycle-icon {
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%,-50%);
+    transition: transform .7s;
 }
 
 #water-btn-row {
@@ -327,12 +363,14 @@ li {
     transition: transform 0.3s ease;
 }
 
-.care-top-row {
+#care-top-row {
+    position: absolute;
     width: 100%;
-    margin-top: 1rem;
-    display: flex;
+    padding: 6px;
+    padding-left: 6px;
+    /* display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
 }
 
 #history-view.open {
