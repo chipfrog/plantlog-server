@@ -6,7 +6,13 @@ const historyView = document.getElementById("history-view")
 
 const waterBtn = document.getElementById("water-btn")
 const waterBtnInternals = document.getElementsByClassName("water-btn-internals")[0]
-const wateredText = document.getElementById("last-watered")
+
+const lastWateredAmount = document.getElementById("last-watered-amount")
+const lastWateredDate = document.getElementById("last-watered-date")
+
+const lastMistedAmount = document.getElementById("last-misted-amount")
+const lastMistedDate = document.getElementById("last-misted-date")
+
 const mistedText = document.getElementById("last-misted")
 const waterRect = document.getElementById("water_rect")
 const waterSVG = document.getElementById("water-drop-svg")
@@ -26,12 +32,17 @@ const timelineBtn = document.getElementById("timeline-btn")
 const closeTimelineViewBtn = document.getElementById("close-history-btn")
 
 const cycleIcon = document.getElementById("cycle-icon")
+const unitTypeBtn = document.getElementById("unit-types-btn")
 
-const unitTypeBtn = document.getElementById("unit-types")
-// const wateringTypeSelect = document.getElementById("watering-types")
+const plantCode = mainApp.dataset.plantCode
+const initWaterAmount = mainApp.dataset.waterAmount
+const initMistAmount = mainApp.dataset.mistAmount
 
-const plantCode = JSON.parse(mainApp.dataset.plantCode)
-const careActions = JSON.parse(mainApp.dataset.careActions)
+console.log('plantCode: ' + plantCode)
+console.log('waterAmount: ' + initWaterAmount)
+console.log('mistAmount: ' + initMistAmount)
+
+const root = document.querySelector(':root')
 
 const waterAmountDesc = {
     xxs: "Nothing",
@@ -43,30 +54,43 @@ const waterAmountDesc = {
     xxl: "Flood"
 }
 
+const descMap = new Map([
+    [waterAmountDesc.xxs, 0], [waterAmountDesc.xs, 1], [waterAmountDesc.s, 2], [waterAmountDesc.m, 3],
+    [waterAmountDesc.l, 4], [waterAmountDesc.xl, 5], [waterAmountDesc.xxl, 6]
+])
+
 const wateringType = {
-    none: 'none',
     top: 'top',
     bottom: 'bottom',
     mist: 'mist'
 }
 
+const maxDeg = 280 // For progress circles in degrees
+const startDeg = 80
+
 const waterMax = 2000
 const waterMin = 0
 
-let activeWateringType = wateringType.none
-
+let activeWateringType = wateringType.top
 let waterUnit = 'ml'
 
 let iconRotation = 0
-
-// let waterUnit = unitTypeSelect.value
-// let waterMethod = wateringTypeSelect.value
 let waterDesc = waterAmountDesc.xxs
 
 let dragging = false
 let waterAmount = 0 // send to db, 100 ml accuracy
 let waterSliderVal = 0 // for animating slider, 1 ml accuracy for smoother animation
 let wateringSuccess = false
+
+init()
+
+function init() {
+    updateWaterProgressBar(initWaterAmount)
+    lastWateredAmount.innerText = initWaterAmount
+    
+    updateMistProgressBar(initMistAmount)
+    lastMistedAmount.innerText = initMistAmount
+}
 
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
@@ -85,14 +109,29 @@ async function addWatering() {
 
         // Update plant info view if res.ok
         const updateData = await res.json()
-        console.log(updateData)
         wateringSuccess = true
 
+        console.log(updateData.watering)
+
+        const amount = updateData.watering.amount
+
+        console.log('amount: ' + amount)
+        const daysSince = updateData.daysSince 
+
         if (updateData.type == 'water') {
-            wateredText.innerHTML = updateData.watering.date
+            console.log('in water IF')
+
+            lastWateredAmount.innerText = amount
+            lastWateredDate.innerText = daysSince
+
+            updateWaterProgressBar(amount)
             addHistoryEntry(updateData)
+
         } else if (updateData.type == 'mist') {
-            mistedText.innerHTML = updateData.watering.date
+            lastMistedAmount.innerText = amount
+            lastMistedDate.innerText = daysSince
+
+            updateMistProgressBar(amount)
             addHistoryEntry(updateData)
         }
 
@@ -105,20 +144,48 @@ async function addWatering() {
 }
 
 function addHistoryEntry(update) {
-    console.log('adding history entry')
-    console.log(update)
     const instance = historyItemTemplate.content.cloneNode(true)
     instance.querySelector('.care-action-name').textContent = update.watering.method
     instance.querySelector('.care-action-timestamp').textContent = update.watering.time
     instance.querySelector('.water-amount').textContent = update.watering.amount
-    console.log(instance)
     actionList.prepend(instance)
+}
+
+function isNumeric(val) {
+    return !isNaN(val) && isFinite(val)
+}
+
+function getMlToDeg(ml) {
+    const deg = (maxDeg / waterMax) * ml + startDeg
+    return deg
+}
+
+function getDescToDeg(desc) {
+    const deg = (maxDeg / (Object.keys(waterAmountDesc).length - 1)) * descMap.get(desc) + startDeg
+    return deg
+}
+
+function getDeg(amount) {
+    if (isNumeric(amount)) {
+        return `${getMlToDeg(amount)}deg`
+
+    } else {
+        return `${getDescToDeg(amount)}deg`
+    }
+}
+
+function updateWaterProgressBar(amount) {
+    root.style.setProperty('--water-progress', getDeg(amount))
+}
+
+function updateMistProgressBar(amount) {
+    root.style.setProperty('--mist-progress', getDeg(amount))
 }
 
 function getPayload() {
     let payload = {
         plantCode: plantCode,
-        method: waterMethod,
+        method: activeWateringType,
     }
 
     if (waterUnit === 'approximate') {
@@ -261,10 +328,7 @@ unitTypeBtn.addEventListener('click', (e) => {
 })
 
 showerSVG.addEventListener('click', (e) => {
-    if (activeWateringType === wateringType.top) {
-        activeWateringType = wateringType.none
-        showerSVG.setAttribute('fill', 'darkgray')
-    } else {
+    if (activeWateringType !== wateringType.top) {
         activeWateringType = wateringType.top
         showerSVG.setAttribute('fill', 'black')
         glassSVG.setAttribute('fill', 'darkgray')
@@ -273,10 +337,7 @@ showerSVG.addEventListener('click', (e) => {
 })
 
 glassSVG.addEventListener('click', (e) => {
-    if (activeWateringType === wateringType.bottom) {
-        activeWateringType = wateringType.none
-        glassSVG.setAttribute('fill', 'darkgray')
-    } else {
+    if (activeWateringType !== wateringType.bottom) {
         activeWateringType = wateringType.bottom
         showerSVG.setAttribute('fill', 'darkgray')
         glassSVG.setAttribute('fill', 'black')
@@ -285,20 +346,13 @@ glassSVG.addEventListener('click', (e) => {
 })
 
 spraySVG.addEventListener('click', (e) => {
-    if (activeWateringType === wateringType.mist) {
-        activeWateringType = wateringType.none
-        spraySVG.setAttribute('fill', 'darkgray')
-    } else {
+    if (activeWateringType !== wateringType.mist) {
         activeWateringType = wateringType.mist
         showerSVG.setAttribute('fill', 'darkgray')
         glassSVG.setAttribute('fill', 'darkgray')
         spraySVG.setAttribute('fill', 'black')
     }
 })
-
-
-
-
 
 waterBtn.addEventListener('transitionend', (e) => {
     e.preventDefault()

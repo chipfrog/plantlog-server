@@ -14,3 +14,23 @@ export function formatDate(ms) {
 
     return dateTime
 }
+
+export function getDaysSince(oldTimestamp) {
+    console.log('timestamp')
+    console.log(oldTimestamp)
+
+
+    const currentTimeStamp = Date.now()
+    const diff = currentTimeStamp - oldTimestamp
+
+    const diffMinutes = Math.floor(diff / (1000 * 60))
+    const diffHours = Math.floor(diff / (1000 * 60 * 60))
+    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+  
+
+    console.log('DAYS SINCE: ')
+    console.log(diffDays)
+    
+    return diffDays
+}

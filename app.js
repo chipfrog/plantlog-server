@@ -13,11 +13,11 @@ import {
     eraseAllData,
     insertWatering,
     getMistings,
-    getAllCareActions
+    getAllCareActions,    
 } from './db.js'
 
 import Plant from './plant.js'
-import { formatDate } from './utils.js'
+import { formatDate, getDaysSince } from './utils.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,7 +50,33 @@ if (databaseType === 'test') {
     insertPlant(db, p3)
     insertPlant(db, p4)
     insertPlant(db, p5)
+
     getPlants(db)
+
+    const watering_1 = { plantCode: 'PEI-2025-01', method: 'top', amount: 1000, wateredAt:  1759610091000 }
+    insertWatering(db, watering_1)
+
+    const misting_1 = { plantCode: 'PEI-2025-01', method: 'mist', amount: 'Sprinkle', wateredAt:  1759314489000 }
+    insertWatering(db, misting_1)
+
+}
+
+function daysSinceText(waterings) {
+    console.log(waterings)
+    console.log('typeof: ' + typeof waterings)
+
+    let lastWatered
+    const daysSince = getDaysSince(waterings[0].watered_at)
+
+    if (daysSince === 0) {
+        lastWatered = 'Today'
+    } else if (daysSince === 1) {
+        lastWatered = "1 day ago"
+    } else {
+        lastWatered = `${daysSince} days ago`
+    }
+
+    return lastWatered
 }
 
 // Routing
@@ -66,14 +92,19 @@ app.get('/plant/:code', (req, res) => {
     const mistings = getMistings(db, plantCode)
     const careActions = getAllCareActions(db, plantCode)
 
-    let lastMisted = "-"
-    let lastWatered = "-"
-    
+    let lastWatered = "No records"
+    let lastMisted = "No records"
+    let waterAmount = 0
+    let mistAmount = 0
+
     if (waterings) {
-        lastWatered = formatDate(waterings[0].watered_at).date
+        waterAmount = waterings[0].amount
+        lastWatered = daysSinceText(waterings)
     }
+
     if (mistings) {
-        lastMisted = formatDate(mistings[0].watered_at).date
+        mistAmount = mistings[0].amount
+        lastMisted = daysSinceText(mistings)
     }
 
     if (careActions) {
@@ -81,14 +112,11 @@ app.get('/plant/:code', (req, res) => {
             const dateTime = formatDate(c.watered_at)
             const date = dateTime.date
             const time = dateTime.time
-            
-            
             c.date = date
             c.time = time     
         }
     }
-
-    res.render('plant' , { plant, lastWatered, lastMisted, careActions })
+    res.render('plant' , { plant, lastWatered, lastMisted, waterAmount, mistAmount, careActions })
 })
 
 app.post('/plant/:code/waterings', (req, res) => {
@@ -99,22 +127,20 @@ app.post('/plant/:code/waterings', (req, res) => {
     console.log(watering)
     watering.wateredAt = timeStamp
     
-    let lastUpdate = "-"
     const insertedWatering = insertWatering(db, watering)
-    console.log('insertedWatering:')
-    console.log(insertedWatering)
+    
 
     if (insertedWatering) {
         const dateTime = formatDate(insertedWatering.watered_at)
-        const date = dateTime.date
-        const time = dateTime.time
-        insertedWatering.date = date
-        insertedWatering.time = time    
+        const daysSince = daysSinceText([insertedWatering])
 
+        insertedWatering.date = dateTime.date
+        insertedWatering.time = dateTime.time
+        
         if (insertedWatering.method === 'mist') {
-            res.json({ watering: insertedWatering, type: 'mist' })
+            res.json({ watering: insertedWatering, type: 'mist', daysSince: daysSince })
         } else {
-            res.json({ watering: insertedWatering, type: 'water' })
+            res.json({ watering: insertedWatering, type: 'water', daysSince: daysSince })
         }
     }
 })

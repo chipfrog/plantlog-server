@@ -7,7 +7,12 @@
         <link rel="stylesheet" href="/styles.css">
     </head>
     <body>
-        <main id="app" data-plant-code="<%= JSON.stringify(plant.code) %>" data-care-actions='<%- JSON.stringify(careActions) %>'>
+        <main id="app" 
+            data-plant-code="<%= plant.code %>" 
+            data-care-actions="<%= careActions %>"
+            data-water-amount="<%= waterAmount %>"
+            data-mist-amount="<%= mistAmount %>"
+        >
             <div id="info-view">
                 <div id="img-container">
                     <% if (plant.imagePath) { %>
@@ -28,16 +33,16 @@
                                 <div class="progress-bar mist" role="progressbar">
                                     <img class="progress-bar-icon" src="/icons/spray.svg">
                                 </div>
-                                <div>Flood</div>
-                                <div style="font-size: small;">21 days ago</div>
+                                <div id="last-misted-amount"></div>
+                                <div id="last-misted-date" style="font-size: small;"><%= lastMisted %></div>
                             </div>
 
                             <div class="progress-bar-container">
                                 <div class="progress-bar water" role="progressbar">
                                     <img class="progress-bar-icon" src="/icons/water_drop.svg">
                                 </div>
-                                <div>Generous</div>
-                                <div style="font-size: small;">51 days ago</div>
+                                <div id="last-watered-amount"></div>
+                                <div id="last-watered-date" style="font-size: small;"><%= lastWatered %></div>
                             </div>
 
                             <div class="progress-bar-container">
@@ -45,7 +50,7 @@
                                     <img class="progress-bar-icon" src="/icons/tractor.svg">
                                 </div>
                                 <div>Generous</div>
-                                <div style="font-size: small;">52 days ago</div>
+                                <div style="font-size: small;">No records</div>
                             </div>
 
                         </div>
@@ -62,10 +67,9 @@
             </div>
             <div id="care-view">
                 <div id="care-top-row">
-                    <button id="close-water-btn" class="round-btn">
-                        <img class="icon" src="/icons/arrow_back.svg">
+                    <button id="close-water-btn">
+                        <img id="close-water-icon" src="/icons/arrow_back.svg">
                     </button>
-
                 </div>
 
                 <div id="water-slider">
@@ -86,23 +90,15 @@
                     </svg>
                     <div class="water-options">
                         <p id="water-amount">0 ml</p>
-                        <button id="unit-types">
+                        <button id="unit-types-btn">
                             <img id="cycle-icon" src="/icons/cycle.svg">
                         </button>
                     </div>
-                    <!-- <select name="unit-types" id="unit-types" class="dropdown">
-                        <option value="ml" selected>Exact (ml)</option>
-                        <option value="approximate">Approximate</option>
-                    </select>
-                    <select name="watering-types" id="watering-types" class="dropdown">
-                        <option value="top" selected>Top watering</option>
-                        <option value="bottom">Bottom watering</option>
-                        <option value="mist">Misting</option>
-                    </select> -->
+
                 </div>
                 <div id="water-type">
 
-                    <svg id="shower-icon" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="darkgray">
+                    <svg id="shower-icon" xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="black">
                         <path d="M320-240q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm160 0q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm160 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240ZM200-400v-80q0-106 68-184t172-92v-84h80v84q104 14 172 92t68 184v80H200Zm80-80h400q0-83-58.5-141.5T480-680q-83 0-141.5 58.5T280-480Zm40 360q-17 0-28.5-11.5T280-160q0-17 11.5-28.5T320-200q17 0 28.5 11.5T360-160q0 17-11.5 28.5T320-120Zm160 0q-17 0-28.5-11.5T440-160q0-17 11.5-28.5T480-200q17 0 28.5 11.5T520-160q0 17-11.5 28.5T480-120Zm160 0q-17 0-28.5-11.5T600-160q0-17 11.5-28.5T640-200q17 0 28.5 11.5T680-160q0 17-11.5 28.5T640-120ZM480-480Z"/>
                     </svg>
 
@@ -125,7 +121,7 @@
                     <div></div>
                     <h1>Care History</h1>
                     <button id="close-history-btn" class="round-btn">
-                        <img class="icon" src="/icons/arrow_forward.svg">
+                        <img id="close-icon" src="/icons/arrow_forward.svg">
                     </button>
                 </div>
                 <div id="action-list"></div>

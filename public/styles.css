@@ -9,9 +9,9 @@
     --overlay: #fefae0;
     --secondary-surface: #dce3c7;
 
-    --water-progress: 120deg;
+    --water-progress: 80deg;
     --mist-progress: 270deg;
-    --fertilizer-progress: 225deg;
+    --fertilizer-progress: 80deg;
 
 }
 
@@ -189,7 +189,7 @@ li {
     flex-direction: column;
     justify-content: center;
     align-items: center; */
-    background: rgba(109, 218, 255, 0.26);
+    background: rgba(109, 218, 255, 0.5);
     backdrop-filter: blur(12px);
     transform: translateX(100%);
     transition: transform 0.5s ease;
@@ -208,6 +208,23 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+#close-water-btn {
+    position: absolute;
+    left: 1.5rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid black;    
+}
+
+#close-water-icon {
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%,-50%);
 }
 
 #top-row h1 {
@@ -265,7 +282,7 @@ li {
     font-size: xx-large;
 }
 
-#unit-types {
+#unit-types-btn {
     position: absolute;
     left: calc(50% + 90px);
     width: 50px;
