@@ -38,10 +38,6 @@ const plantCode = mainApp.dataset.plantCode
 const initWaterAmount = mainApp.dataset.waterAmount
 const initMistAmount = mainApp.dataset.mistAmount
 
-console.log('plantCode: ' + plantCode)
-console.log('waterAmount: ' + initWaterAmount)
-console.log('mistAmount: ' + initMistAmount)
-
 const root = document.querySelector(':root')
 
 const waterAmountDesc = {
@@ -85,12 +81,28 @@ let wateringSuccess = false
 init()
 
 function init() {
-    updateWaterProgressBar(initWaterAmount)
-    lastWateredAmount.innerText = initWaterAmount
-    
-    updateMistProgressBar(initMistAmount)
-    lastMistedAmount.innerText = initMistAmount
+    updateLastWateredInfo(initWaterAmount)
+    updateLastMistedInfo(initMistAmount)
 }
+
+function updateLastWateredInfo(amount) {
+    if (isNumeric(amount)) {
+        lastWateredAmount.innerText = `${parseInt(amount)} ml`
+    } else {
+        lastWateredAmount.innerText = amount
+    }
+    updateWaterProgressBar(amount) 
+}
+
+function updateLastMistedInfo(amount) {
+    if (isNumeric(amount)) {
+        lastMistedAmount.innerText = `${parseInt(amount)} ml`
+    } else {
+        lastMistedAmount.innerText = amount
+    }
+    updateMistProgressBar(amount)
+}
+ 
 
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
@@ -111,27 +123,21 @@ async function addWatering() {
         const updateData = await res.json()
         wateringSuccess = true
 
-        console.log(updateData.watering)
-
         const amount = updateData.watering.amount
-
-        console.log('amount: ' + amount)
         const daysSince = updateData.daysSince 
 
         if (updateData.type == 'water') {
-            console.log('in water IF')
 
-            lastWateredAmount.innerText = amount
+            updateLastWateredInfo(amount)
             lastWateredDate.innerText = daysSince
-
-            updateWaterProgressBar(amount)
+            
             addHistoryEntry(updateData)
 
         } else if (updateData.type == 'mist') {
-            lastMistedAmount.innerText = amount
-            lastMistedDate.innerText = daysSince
 
-            updateMistProgressBar(amount)
+            updateLastMistedInfo(amount)
+            lastMistedDate.innerText = daysSince
+            
             addHistoryEntry(updateData)
         }
 
