@@ -153,10 +153,18 @@ async function addWatering() {
 }
 
 function addHistoryEntry(update) {
+    let amount = update.watering.amount
+
+    if (isNumeric(amount)) {
+        amount = parseInt(amount)
+        amount += ' ml'
+    }
+
     const instance = historyItemTemplate.content.cloneNode(true)
-    instance.querySelector('.care-action-name').textContent = update.watering.method
-    instance.querySelector('.care-action-timestamp').textContent = update.watering.time
-    instance.querySelector('.water-amount').textContent = update.watering.amount
+    instance.querySelector('.history-title').textContent = waterTitleMap.get(update.watering.method)
+    instance.querySelector('.date-val').textContent = update.watering.date
+    instance.querySelector('.time-val').textContent = update.watering.time
+    instance.querySelector('.water-amount').textContent = amount
     actionList.prepend(instance)
 }
 

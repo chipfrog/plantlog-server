@@ -129,7 +129,7 @@
             <template id="history-item-template">
                 <div class="history-item">
                     <div class="card-header">
-                        <h3 class="care-action-name"></h3>
+                        <h3 class="history-title"></h3>
                     </div>
                     <div class="card-content">
                         <div class="date-title">Date:</div>
@@ -164,7 +164,7 @@
                 }
 
                 const clone = template.content.cloneNode(true)
-                clone.querySelector('.care-action-name').textContent = waterTitleMap.get(a.method)
+                clone.querySelector('.history-title').textContent = waterTitleMap.get(a.method)
                 clone.querySelector('.date-val').textContent = a.date
                 clone.querySelector('.time-val').textContent = a.time
                 clone.querySelector('.water-amount').textContent = amount

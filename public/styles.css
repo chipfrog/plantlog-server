@@ -429,7 +429,6 @@ li {
     box-shadow: 2px 2px 2px lightslategray;
     border-radius: 12px;
     margin: 1rem;
-    overflow: hidden;
 }
 
 .card-header {
