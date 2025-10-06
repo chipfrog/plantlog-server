@@ -128,9 +128,17 @@
             
             <template id="history-item-template">
                 <div class="history-item">
-                    <h3 class="care-action-name"></h3>
-                    <p class="care-action-timestamp"></p>
-                    <p class="water-amount"></p>
+                    <div class="card-header">
+                        <h3 class="care-action-name"></h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="date-title">Date:</div>
+                        <div class="date-val"></div>
+                        <div class="time-title">Time:</div>
+                        <div class="time-val"></div>
+                        <div class="water-title">Amount:</div>
+                        <div class="water-amount"></div>
+                    </div>
                 </div>
             </template>
         </main>
@@ -139,10 +147,27 @@
             const container = document.getElementById('action-list')
             const template = document.getElementById('history-item-template')
 
+            const waterTitleMap = new Map([
+                ['top', 'Top Watering'], ['bottom', 'Bottom Watering'], ['mist', 'Misting']
+            ])
+
+            function isNumeric(val) {
+                return !isNaN(val) && isFinite(val)
+            }
+
             actions.forEach(a => {
+                let amount = a.amount
+
+                if (isNumeric(a.amount)) {
+                    amount = parseInt(amount)
+                    amount += ' ml'
+                }
+
                 const clone = template.content.cloneNode(true)
-                clone.querySelector('.care-action-name').textContent = a.method
-                clone.querySelector('.care-action-timestamp').textContent = a.time
+                clone.querySelector('.care-action-name').textContent = waterTitleMap.get(a.method)
+                clone.querySelector('.date-val').textContent = a.date
+                clone.querySelector('.time-val').textContent = a.time
+                clone.querySelector('.water-amount').textContent = amount
                 container.appendChild(clone)
             })
         </script>

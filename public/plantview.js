@@ -50,16 +50,20 @@ const waterAmountDesc = {
     xxl: "Flood"
 }
 
-const descMap = new Map([
-    [waterAmountDesc.xxs, 0], [waterAmountDesc.xs, 1], [waterAmountDesc.s, 2], [waterAmountDesc.m, 3],
-    [waterAmountDesc.l, 4], [waterAmountDesc.xl, 5], [waterAmountDesc.xxl, 6]
-])
-
 const wateringType = {
     top: 'top',
     bottom: 'bottom',
     mist: 'mist'
 }
+
+const descMap = new Map([
+    [waterAmountDesc.xxs, 0], [waterAmountDesc.xs, 1], [waterAmountDesc.s, 2], [waterAmountDesc.m, 3],
+    [waterAmountDesc.l, 4], [waterAmountDesc.xl, 5], [waterAmountDesc.xxl, 6]
+])
+
+const waterTitleMap = new Map([
+    [wateringType.top, 'Top Watering'], [wateringType.bottom, 'Bottom Watering'], [wateringType.mist, 'Misting']
+])
 
 const maxDeg = 280 // For progress circles in degrees
 const startDeg = 80
@@ -103,7 +107,6 @@ function updateLastMistedInfo(amount) {
     updateMistProgressBar(amount)
 }
  
-
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
     const payload = getPayload()
