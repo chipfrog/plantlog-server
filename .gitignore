@@ -51,7 +51,4 @@ temp/
 # Databases
 *.db
 
-# images
-*.jpg
-*.jpeg
-*.png
+/public/images/
