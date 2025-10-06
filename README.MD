@@ -18,8 +18,11 @@ Mobile web app for keeping track of houseplant waterings. Personal project, unde
 
  ## Views
 
- | Main View | Watering View | History View |
- | --- | --- | --- |
- |![Main View](readme_images/main_view.png) | ![Watering View](readme_images/watering_view.png) | ![History View](readme_images/history_view.png) |
-
+<table>
+  <tr>
+    <td><img src="readme_images/main_view.png" width="300"></td>
+    <td><img src="readme_images/watering_view.png" width="300"></td>
+    <td><img src="readme_images/history_view.png" width="300"></td>
+  </tr>
+</table>
 
