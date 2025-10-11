@@ -75,6 +75,8 @@ const startDeg = 80
 const waterMax = 2000
 const waterMin = 0
 
+let careViewOpen = false
+
 let activeWateringType = wateringType.top
 let waterUnit = 'ml'
 
@@ -129,7 +131,6 @@ async function addWatering() {
         // Update plant info view if res.ok
         const updateData = await res.json()
         wateringSuccess = true
-
         const amount = updateData.watering.amount
         const daysSince = updateData.daysSince 
 
@@ -326,28 +327,39 @@ function toggleWaterBtnActivity () {
     }
 }
 
-// TODO: Stop animation when watering screen not active !!
 function animate() {
+    if (!careViewOpen) return
+
     if (wateringSuccess) {
         emptyWaterMeter()
     }
+    updateAnimation()
+    requestAnimationFrame(animate)
+}
+
+function startAnimation() {
+    if (!careViewOpen) {
+        careViewOpen = true
+        requestAnimationFrame(animate)
+    }
+}
+
+function updateAnimation() {
     const y = waterSliderVal/ 2000 * 64
     const invertedY = 64 - y
     waterRect.setAttribute("y", `${invertedY}`)
-
-    requestAnimationFrame(animate)
 }
-requestAnimationFrame(animate)
-
 
 closeWaterViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
     careView.classList.toggle('open')
+    careViewOpen = false
 })
 
 toggleViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
     careView.classList.toggle('open')
+    startAnimation()
 })
 
 timelineBtn.addEventListener('click', (e) => {
