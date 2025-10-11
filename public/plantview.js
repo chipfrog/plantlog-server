@@ -106,6 +106,8 @@ function updateLastMistedInfo(amount) {
     }
     updateMistProgressBar(amount)
 }
+
+
  
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
@@ -128,6 +130,8 @@ async function addWatering() {
 
         const amount = updateData.watering.amount
         const daysSince = updateData.daysSince 
+
+        console.log(updateData)
 
         if (updateData.type == 'water') {
 
@@ -165,7 +169,30 @@ function addHistoryEntry(update) {
     instance.querySelector('.date-val').textContent = update.watering.date
     instance.querySelector('.time-val').textContent = update.watering.time
     instance.querySelector('.water-amount').textContent = amount
+    instance.querySelector('.delete-btn').id = `watering-${update.watering.id}`
+
+    console.log(instance)
     actionList.prepend(instance)
+}
+
+async function deleteWatering(btn) {
+    const id = btn.id.split("-")[1]
+    console.log('wateringId: ' + id)
+    const url = `/plant/${encodeURIComponent(plantCode)}/waterings/${encodeURIComponent(id)}`
+
+    try {
+        const res = await fetch(url, { method: "DELETE" })
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}))
+            throw new Error(err.message || `HTTP ${res.status}`)
+        }
+        btn.closest('.history-item').remove()
+
+    } catch(e) {
+        console.error(e);
+        alert("Failed to delete watering");
+    }
 }
 
 function isNumeric(val) {
@@ -384,6 +411,14 @@ waterBtn.addEventListener('transitionend', (e) => {
 waterSVG.addEventListener('mousedown', (e) => {
     e.preventDefault()
     dragging = true
+})
+
+actionList.addEventListener('click', (e) => {
+    const btn = e.target.closest('.delete-btn')
+    if (btn) {
+        console.log(`clicked delete for id: ${btn.id}`)
+        deleteWatering(btn)
+    }
 })
 
 document.addEventListener('mouseup', (e) => {

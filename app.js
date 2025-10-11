@@ -1,4 +1,3 @@
-import ejs from 'ejs'
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -12,6 +11,7 @@ import {
     getWaterings,
     eraseAllData,
     insertWatering,
+    deleteWatering,
     getMistings,
     getAllCareActions,    
 } from './db.js'
@@ -23,7 +23,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express()
-const port = 3000
+const port = 3002
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -142,6 +142,19 @@ app.post('/plant/:code/waterings', (req, res) => {
         } else {
             res.json({ watering: insertedWatering, type: 'water', daysSince: daysSince })
         }
+    }
+})
+
+app.delete('/plant/:code/waterings/:id', (req, res) => {
+    console.log('TRYING TO DELETE')
+    const wateringId = req.params.id
+    console.log(req.params)
+    console.log(`wateringId: ${wateringId}`)
+    const info = deleteWatering(wateringId)
+    if (info.changes > 0) {
+        res.status(200).json({ success: true })
+    } else {
+        res.status(404).json({ error: 'Item not found' })
     }
 })
 

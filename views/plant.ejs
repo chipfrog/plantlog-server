@@ -138,6 +138,9 @@
                         <div class="time-val"></div>
                         <div class="water-title">Amount:</div>
                         <div class="water-amount"></div>
+                        <button class="delete-btn">
+                            <img src="/icons/trash.svg">
+                        </button>
                     </div>
                 </div>
             </template>
@@ -164,10 +167,12 @@
                 }
 
                 const clone = template.content.cloneNode(true)
+                // clone.querySelector('.history-item').id = `history-item-${a.id}`
                 clone.querySelector('.history-title').textContent = waterTitleMap.get(a.method)
                 clone.querySelector('.date-val').textContent = a.date
                 clone.querySelector('.time-val').textContent = a.time
                 clone.querySelector('.water-amount').textContent = amount
+                clone.querySelector('.delete-btn').id = `watering-${a.id}`
                 container.appendChild(clone)
             })
         </script>
