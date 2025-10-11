@@ -430,6 +430,11 @@ li {
     box-shadow: 2px 2px 2px lightslategray;
     border-radius: 12px;
     margin: 0.6rem;
+    transition: transform 1s ease;
+}
+
+.deleting-history-item {
+    transform: translateX(200%);
 }
 
 .card-header {
@@ -462,7 +467,7 @@ li {
     padding: 0.6rem;
     border: none;
     background-color: transparent;
-    cursor: pointer;
+    cursor: pointer;    
 }
 
 .care-action-name {

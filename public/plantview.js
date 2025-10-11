@@ -187,7 +187,11 @@ async function deleteWatering(btn) {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
-        btn.closest('.history-item').remove()
+        const historyCard = btn.closest('.history-item')
+        historyCard.classList.add('deleting-history-item')
+        setTimeout(() => {
+            historyCard.remove()
+        }, 500)
 
     } catch(e) {
         console.error(e);
