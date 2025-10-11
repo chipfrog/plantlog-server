@@ -441,6 +441,13 @@ li {
     width: 100%;
 }
 
+.watering-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.6rem;
+}
+
 .card-content {
     display: grid;
     grid-template-columns: 5.5rem auto;
@@ -452,7 +459,7 @@ li {
     position: absolute;
     bottom: 0;
     right: 0;
-    padding: 1rem;
+    padding: 0.6rem;
     border: none;
     background-color: transparent;
     cursor: pointer;

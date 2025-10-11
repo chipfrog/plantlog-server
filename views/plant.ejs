@@ -129,6 +129,7 @@
             <template id="history-item-template">
                 <div class="history-item">
                     <div class="card-header">
+                        <img class="watering-icon">
                         <h3 class="history-title"></h3>
                     </div>
                     <div class="card-content">
@@ -154,6 +155,10 @@
                 ['top', 'Top Watering'], ['bottom', 'Bottom Watering'], ['mist', 'Misting']
             ])
 
+            const wateringIcons = new Map([
+                ['top', '/icons/shower.svg'], ['bottom', '/icons/glass.svg'], ['mist', '/icons/spray.svg']
+            ])
+
             function isNumeric(val) {
                 return !isNaN(val) && isFinite(val)
             }
@@ -167,8 +172,8 @@
                 }
 
                 const clone = template.content.cloneNode(true)
-                // clone.querySelector('.history-item').id = `history-item-${a.id}`
                 clone.querySelector('.history-title').textContent = waterTitleMap.get(a.method)
+                clone.querySelector('.watering-icon').src = wateringIcons.get(a.method)
                 clone.querySelector('.date-val').textContent = a.date
                 clone.querySelector('.time-val').textContent = a.time
                 clone.querySelector('.water-amount').textContent = amount

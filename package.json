@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "css-sync": "browser-sync start --proxy 'localhost:3002' --files 'public/*.css, views/*.html'"
+    "css-sync": "browser-sync start --proxy 'localhost:3005' --files 'public/*.css, views/*.html'"
   },
   "author": "",
   "license": "ISC",

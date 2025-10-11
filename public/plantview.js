@@ -65,6 +65,10 @@ const waterTitleMap = new Map([
     [wateringType.top, 'Top Watering'], [wateringType.bottom, 'Bottom Watering'], [wateringType.mist, 'Misting']
 ])
 
+const wateringIcons = new Map([
+    ['top', '/icons/shower.svg'], ['bottom', '/icons/glass.svg'], ['mist', '/icons/spray.svg']
+])
+
 const maxDeg = 280 // For progress circles in degrees
 const startDeg = 80
 
@@ -106,8 +110,6 @@ function updateLastMistedInfo(amount) {
     }
     updateMistProgressBar(amount)
 }
-
-
  
 async function addWatering() {
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
@@ -134,17 +136,14 @@ async function addWatering() {
         console.log(updateData)
 
         if (updateData.type == 'water') {
-
             updateLastWateredInfo(amount)
             lastWateredDate.innerText = daysSince
-            
             addHistoryEntry(updateData)
 
         } else if (updateData.type == 'mist') {
 
             updateLastMistedInfo(amount)
             lastMistedDate.innerText = daysSince
-            
             addHistoryEntry(updateData)
         }
 
@@ -166,6 +165,7 @@ function addHistoryEntry(update) {
 
     const instance = historyItemTemplate.content.cloneNode(true)
     instance.querySelector('.history-title').textContent = waterTitleMap.get(update.watering.method)
+    instance.querySelector('.watering-icon').src = wateringIcons.get(update.watering.method)
     instance.querySelector('.date-val').textContent = update.watering.date
     instance.querySelector('.time-val').textContent = update.watering.time
     instance.querySelector('.water-amount').textContent = amount
