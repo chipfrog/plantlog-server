@@ -161,7 +161,7 @@ function addHistoryEntry(update) {
 
     if (isNumeric(amount)) {
         amount = parseInt(amount)
-        amount += ' ml'
+        amount += ' ml' 
     }
 
     const instance = historyItemTemplate.content.cloneNode(true)
