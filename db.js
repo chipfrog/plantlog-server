@@ -1,22 +1,26 @@
 
 import Database from 'better-sqlite3'
+import path from 'path';
 import Plant from './plant.js'
 
 let db
+let dbPath
 
 export function getDatabase() {
     if (!db) throw new Error("Database not initialized.")
     return db
 }
 
-export function initDatabase(type) {
+export function initDatabase(env) {
     if (db) return db // Makes sure only on database connection is created, if multiple calls to initDatabase()
-    if (type === 'production') {
-        db = new Database('production.db')
-    } else if (type === 'test') {
-        db = new Database('test.db')
+    if (env === 'production') {        
+        dbPath = path.join('/plantlog/data', 'production.db')
+        
+    } else if (env === 'test') {
+        dbPath = path.join('./data/test.db')
     }
-    
+
+    db = new Database(dbPath)
     db.exec("PRAGMA foreign_keys = ON;")
 
     console.log('intializing database...')

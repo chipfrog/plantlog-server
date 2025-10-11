@@ -1,5 +1,6 @@
 import express from 'express'
 import path from 'path'
+import dotenv from 'dotenv'
 import { fileURLToPath } from 'url'
 import {
     initDatabase,
@@ -19,24 +20,24 @@ import {
 import Plant from './plant.js'
 import { formatDate, getDaysSince } from './utils.js'
 
+dotenv.config()
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express()
-const port = 3002
+const port = process.env.PORT
+const env = process.env.NODE_ENV
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, "public")))
 app.use(express.json());
 
-// Database initialization
-let databaseType = 'test'
-
-initDatabase(databaseType)
+initDatabase(env)
 const db = getDatabase()
 
-if (databaseType === 'test') {
+if (env === 'test') {
     eraseAllData(db)
 
     const p1 = new Plant("PEI-2025-01", "Peikonlehti", "Monstera deliciosa", "/images/monstera.jpg", "01-06-2025")
