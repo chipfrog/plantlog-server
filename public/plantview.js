@@ -4,6 +4,12 @@ const infoView = document.getElementById("info-view")
 const careView = document.getElementById("care-view")
 const historyView = document.getElementById("history-view")
 
+const deleteConfirmation = document.getElementById("delete-confirmation")
+const cancelConfirmationBtn = document.getElementById("cancel-confirmation-btn")
+const deleteConfirmationBtn = document.getElementById("delete-confirmation-btn")
+const deleteType = document.querySelector(".delete-type")
+const deleteDate = document.querySelector(".delete-date")
+
 const waterBtn = document.getElementById("water-btn")
 const waterBtnInternals = document.getElementsByClassName("water-btn-internals")[0]
 
@@ -74,6 +80,7 @@ const startDeg = 80
 
 const waterMax = 2000
 const waterMin = 0
+let emptying = false
 
 let careViewOpen = false
 
@@ -87,6 +94,8 @@ let dragging = false
 let waterAmount = 0 // send to db, 100 ml accuracy
 let waterSliderVal = 0 // for animating slider, 1 ml accuracy for smoother animation
 let wateringSuccess = false
+
+let tempDelBtn = null
 
 init()
 
@@ -176,8 +185,44 @@ function addHistoryEntry(update) {
     actionList.prepend(instance)
 }
 
-async function deleteWatering(btn) {
-    const id = btn.id.split("-")[1]
+function showDeleteConfirmation(btn) {
+    const historyItem = btn.closest('.history-item')
+    const title = historyItem.querySelector('.history-title')
+    const date = historyItem.querySelector('.date-val')
+
+    deleteType.textContent = title.textContent
+    deleteDate.textContent = date.textContent
+    deleteConfirmation.classList.add('increase-Zindex')
+    deleteConfirmation.classList.add('increase-opacity')
+}
+
+function hideDeleteConfirmation() {
+    deleteConfirmation.classList.remove('increase-opacity')
+    setTimeout(() => {
+        deleteConfirmation.classList.remove('increase-Zindex')
+    }, 500)
+}
+
+actionList.addEventListener('click', (e) => {
+    tempDelBtn = e.target.closest('.delete-btn')
+    if (tempDelBtn) {
+        console.log(`clicked delete for id: ${tempDelBtn.id}`)
+        showDeleteConfirmation(tempDelBtn)
+    }
+})
+
+deleteConfirmationBtn.addEventListener('click', (e) => {
+    hideDeleteConfirmation()
+    deleteWatering()
+})
+
+cancelConfirmationBtn.addEventListener('click', (e) => {
+    hideDeleteConfirmation()
+    tempDelBtn = null
+})
+
+async function deleteWatering() {
+    const id = tempDelBtn.id.split("-")[1]
     console.log('wateringId: ' + id)
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings/${encodeURIComponent(id)}`
 
@@ -188,10 +233,11 @@ async function deleteWatering(btn) {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
-        const historyCard = btn.closest('.history-item')
+        const historyCard = tempDelBtn.closest('.history-item')
         historyCard.classList.add('deleting-history-item')
         setTimeout(() => {
             historyCard.remove()
+            tempDelBtn = null
         }, 500)
 
     } catch(e) {
@@ -254,9 +300,12 @@ function showStatusInBtn(success) {
         waterBtn.innerText = "Watering failed!"
         waterBtn.classList.add('failure', 'show-result')
     }
+    emptying = true
+
     setTimeout(() => {
         waterBtn.classList.remove('success', 'failure', 'filled', 'show-result')
         waterBtn.innerText = "Hold to Water"
+        emptying = false
     }, 2500)
 }
 
@@ -322,7 +371,7 @@ function convertMlToDescription(ml) {
 function toggleWaterBtnActivity () {
     if (waterAmount <= 0) {
         waterBtn.disabled = true
-    } else {
+    } else if (!emptying) {
         waterBtn.disabled = false
     }
 }
@@ -429,14 +478,6 @@ waterSVG.addEventListener('mousedown', (e) => {
     dragging = true
 })
 
-actionList.addEventListener('click', (e) => {
-    const btn = e.target.closest('.delete-btn')
-    if (btn) {
-        console.log(`clicked delete for id: ${btn.id}`)
-        deleteWatering(btn)
-    }
-})
-
 document.addEventListener('mouseup', (e) => {
     e.preventDefault()
     dragging = false
@@ -444,7 +485,7 @@ document.addEventListener('mouseup', (e) => {
 
 document.addEventListener('mousemove', (e) => {
     e.preventDefault()
-    if (dragging && !wateringSuccess) {
+    if (dragging && !wateringSuccess && !emptying) {
         convertYToSvgCoordinates(e.clientY)
     }
 })
