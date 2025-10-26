@@ -9,6 +9,9 @@
     --overlay: #fefae0;
     --secondary-surface: #dce3c7;
 
+    --success: #6b8e6b;
+    --warning: #c94c4c;
+
     --water-progress: 80deg;
     --mist-progress: 270deg;
     --fertilizer-progress: 80deg;
@@ -341,12 +344,12 @@ li {
 }
 
 #water-btn.success {
-    background-color: rgba(64, 153, 88, 1);
+    background-color: var(--success);
     color: white;
 }
 
 #water-btn.failure {
-    background-color: rgb(237, 81, 85, 1);
+    background-color: var(--warning);
     color: white;
 }
 
@@ -415,13 +418,11 @@ li {
 }
 
 
-
-
 .confirmation {
     position: relative;
     height: 200px;
     width: 300px;
-    background-color: var(--primary);
+    background-color: var(--overlay);
     border-radius: 12px;
 }
 
@@ -443,10 +444,15 @@ li {
 .btn-row-confirmation {
     position: absolute;
     bottom: 0;
+    height: 35px;
     width: 100%;
     display: flex;
     justify-content: space-around;
     padding-bottom: 10px;
+}
+
+.warning-btn {
+    background-color: var(--warning);
 }
 
 #history-top-row {

@@ -46,6 +46,7 @@ const initMistAmount = mainApp.dataset.mistAmount
 
 const root = document.querySelector(':root')
 
+
 const waterAmountDesc = {
     xxs: "Nothing",
     xs: "Sprinkle",
@@ -85,7 +86,7 @@ let emptying = false
 let careViewOpen = false
 
 let activeWateringType = wateringType.top
-let waterUnit = 'ml'
+let waterUnit = 'approximate'
 
 let iconRotation = 0
 let waterDesc = waterAmountDesc.xxs
