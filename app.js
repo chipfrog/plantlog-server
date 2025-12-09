@@ -163,6 +163,11 @@ app.get('/plant', (req, res) => {
     console.log('IN_PLANT')
 })
 
+app.get('/addplant', (req, res) => {
+    console.log('addplant page')
+    res.sendFile(path.join(__dirname, "views", 'addplant.html'))
+})
+
 app.post('/', (req, res) => {
     console.log(req.params)
     res.send('Got a POST request')

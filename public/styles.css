@@ -207,6 +207,15 @@ li {
     border: 2px solid black;   
 }
 
+.invisible-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    /* border: 2px solid black;    */
+}
+
 #close-water-btn {
     position: absolute;
     left: 1.5rem;
@@ -285,6 +294,7 @@ li {
     position: absolute; 
     top: 50%; 
     left: 50%; 
+    height: 32px;
     transform: translate(-50%,-50%);
     transition: transform .5s ease;
 }
