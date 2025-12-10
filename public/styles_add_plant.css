@@ -45,6 +45,16 @@ button {
 
 .main-container {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input {
+    margin-bottom: 15px;
 }

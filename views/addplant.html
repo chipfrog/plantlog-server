@@ -9,7 +9,16 @@
     <body>
         <main>
             <div class="main-container">
-                <h1>New Plant!</h1>
+                <h1>Add plant</h1>
+                <form action="/save-plant" method="POST">
+                    <label for="pname">Plant name:</label>
+                    <input type="text" id="pname" name="pname"><br>
+                    <label for="bname">Botanical name:</label>
+                    <input type="text" id="bname" name="bname">
+                    <label for="pdate">Date of purchase:</label>
+                    <input type="date" id="pdate" name="pdate">
+                    <button type="submit">Save</button>
+                </form>
             </div>
         </main>
     </body>

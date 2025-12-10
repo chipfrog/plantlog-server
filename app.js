@@ -32,6 +32,7 @@ const env = process.env.NODE_ENV
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, "public")))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
 initDatabase(env)
@@ -166,6 +167,12 @@ app.get('/plant', (req, res) => {
 app.get('/addplant', (req, res) => {
     console.log('addplant page')
     res.sendFile(path.join(__dirname, "views", 'addplant.html'))
+})
+
+app.post('/save-plant', (req, res) => {
+    console.log('got a new plant!')
+    const name = req.body
+    console.log(name)
 })
 
 app.post('/', (req, res) => {
