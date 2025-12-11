@@ -11,6 +11,10 @@
             <div class="main-container">
                 <h1>Add plant</h1>
                 <form action="/save-plant" method="POST">
+                    <button id="snap">
+                        <img src="/icons/add_photo.svg">
+                    </button>
+                    <!-- <input type="file" id="ppicture" name="ppicture" accept="image/*" capture="environment"/> -->
                     <label for="pname">Plant name:</label>
                     <input type="text" id="pname" name="pname"><br>
                     <label for="bname">Botanical name:</label>
@@ -21,5 +25,6 @@
                 </form>
             </div>
         </main>
+        <script src="/addplant.js" type="module" defer></script>
     </body>
 </html>
