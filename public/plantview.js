@@ -3,6 +3,7 @@ const mainApp = document.getElementById("app")
 const infoView = document.getElementById("info-view")
 const careView = document.getElementById("care-view")
 const historyView = document.getElementById("history-view")
+const fertilizeView = document.getElementById("fertilize-view")
 
 const deleteConfirmation = document.getElementById("delete-confirmation")
 const cancelConfirmationBtn = document.getElementById("cancel-confirmation-btn")
@@ -36,6 +37,9 @@ const closeWaterViewBtn = document.getElementById("close-water-btn")
 
 const timelineBtn = document.getElementById("timeline-btn")
 const closeTimelineViewBtn = document.getElementById("close-history-btn")
+
+const fertilizeBtn = document.getElementById("fertilize-btn")
+const closeFertilizeBtn = document.getElementById("close-fertilize-btn")
 
 const cycleIcon = document.getElementById("cycle-icon")
 const unitTypeBtn = document.getElementById("unit-types-btn")
@@ -410,6 +414,16 @@ toggleViewBtn.addEventListener('click', (e) => {
     e.preventDefault()
     careView.classList.toggle('open')
     startAnimation()
+})
+
+fertilizeBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    fertilizeView.classList.toggle('open')
+})
+
+closeFertilizeBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    fertilizeView.classList.toggle('open')
 })
 
 timelineBtn.addEventListener('click', (e) => {
