@@ -44,6 +44,10 @@ const closeFertilizeBtn = document.getElementById("close-fertilize-btn")
 const cycleIcon = document.getElementById("cycle-icon")
 const unitTypeBtn = document.getElementById("unit-types-btn")
 
+const removeFertBtn = document.getElementById("remove-fert");
+const addFertBtn = document.getElementById("add-fert")
+const fertCount = document.getElementById("fert-count")
+
 const plantCode = mainApp.dataset.plantCode
 const initWaterAmount = mainApp.dataset.waterAmount
 const initMistAmount = mainApp.dataset.mistAmount
@@ -516,5 +520,23 @@ document.addEventListener('touchend', (e) => {
 waterSVG.addEventListener('touchmove', (e) => {
     if (dragging && !wateringSuccess) {
         convertYToSvgCoordinates(e.touches[0].clientY)
+    }
+})
+
+// Fertilization
+
+addFertBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    let currCount = Number(fertCount.textContent)
+    currCount += 1
+    fertCount.textContent = currCount
+})
+
+removeFertBtn.addEventListener('click', (e)  => {
+    e.preventDefault()
+    let currCount = Number(fertCount.textContent)
+    if (currCount > 0) {
+        currCount -= 1
+        fertCount.textContent = currCount
     }
 })
