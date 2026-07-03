@@ -47,6 +47,7 @@ const unitTypeBtn = document.getElementById("unit-types-btn")
 const removeFertBtn = document.getElementById("remove-fert");
 const addFertBtn = document.getElementById("add-fert")
 const fertCount = document.getElementById("fert-count")
+const saveFertBtn = document.getElementById("save-fert")
 
 const plantCode = mainApp.dataset.plantCode
 const initWaterAmount = mainApp.dataset.waterAmount
@@ -210,6 +211,10 @@ function hideDeleteConfirmation() {
     setTimeout(() => {
         deleteConfirmation.classList.remove('increase-Zindex')
     }, 500)
+}
+
+function addFertilization() {
+
 }
 
 actionList.addEventListener('click', (e) => {
@@ -528,15 +533,23 @@ waterSVG.addEventListener('touchmove', (e) => {
 addFertBtn.addEventListener('click', (e) => {
     e.preventDefault()
     let currCount = Number(fertCount.textContent)
-    currCount += 1
-    fertCount.textContent = currCount
+    if (currCount < 9) {
+        currCount += 1
+        fertCount.textContent = currCount
+    }
 })
 
 removeFertBtn.addEventListener('click', (e)  => {
     e.preventDefault()
     let currCount = Number(fertCount.textContent)
-    if (currCount > 0) {
+    if (currCount > 1) {
         currCount -= 1
         fertCount.textContent = currCount
     }
 })
+
+saveFertBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    console.log('click')
+})
+

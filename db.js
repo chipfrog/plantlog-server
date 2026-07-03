@@ -50,7 +50,7 @@ export function initDatabase(env) {
             id INTEGER PRIMARY KEY,
             brand TEXT,
             product_name TEXT,
-            form TEXT,
+            type TEXT,
             npk TEXT
         );
 
@@ -84,6 +84,23 @@ export function insertWatering(db, watering) {
         return getWateringById(info.lastInsertRowid)
     }
     return false
+}
+
+export function inserFertilizer(db, fertilizer) {
+    const insert = db.prepare('INSERT INTO FERTILIZERS (brand, product_name, type) VALUES (?, ?, ?)')
+    const info = insert.run(fertilizer.brand, fertilizer.name, fertilizer.type )
+    console.log(info)
+}
+
+export function insertFertilization(db, fertilization) {
+    const plantId = getPlantId(db, fertilization.plantCode)
+    const insert = db.prepare('INSERT INTO FERTILIZATIONS (plant_id, fertilizer_id, fertilized_at, amount)')
+    // const info = insert.run(plantId, fertilization)
+}
+
+export function getFertilizerId(db, code) {
+    console.log('getting fertilizerId with code: ' + code)
+    const stmt = db.prepare("SELECT id FROM fertilizers WHERE ")
 }
 
 export function getPlantId(db, code) {
