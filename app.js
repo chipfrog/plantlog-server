@@ -17,7 +17,8 @@ import {
     getAllCareActions,
     inserFertilizer,
     getFertilizers,
-    insertFertilization,    
+    insertFertilization,
+    getFertilizations,    
 } from './db.js'
 
 import Plant from './plant.js'
@@ -41,7 +42,6 @@ app.use(express.json());
 
 initDatabase(env)
 const db = getDatabase()
-
 
 //  "test" or "production"
 if (env === 'test') {
@@ -75,12 +75,9 @@ if (env === 'test') {
     inserFertilizer(db, fert1)
 }
 
-function daysSinceText(waterings) {
-    console.log(waterings)
-    console.log('typeof: ' + typeof waterings)
-
+function daysSinceText(watering) {
     let lastWatered
-    const daysSince = getDaysSince(waterings[0].watered_at)
+    const daysSince = getDaysSince(watering[0].watered_at)
 
     if (daysSince === 0) {
         lastWatered = 'Today'
@@ -91,6 +88,21 @@ function daysSinceText(waterings) {
     }
 
     return lastWatered
+}
+
+function daysSinceFertText(fert) {
+    let lastFertilized
+    const daysSince = getDaysSince(fert[0].fertilized_at)
+
+    if (daysSince === 0) {
+        lastFertilized = 'Today'
+    } else if (daysSince === 1) {
+        lastFertilized = "1 day ago"
+    } else {
+        lastFertilized = `${daysSince} days ago`
+    }
+
+    return lastFertilized
 }
 
 // Routing
@@ -104,14 +116,18 @@ app.get('/plant/:code', (req, res) => {
     const plant = getPlant(db, plantCode)
     const waterings = getWaterings(db, plantCode)
     const mistings = getMistings(db, plantCode)
+    const fertilizations = getFertilizations(db, plantCode)
     const careActions = getAllCareActions(db, plantCode)
     
     const fertilizerList = getFertilizers(db)
 
     let lastWatered = "No records"
     let lastMisted = "No records"
+    let lastFertilized = "No records"
+
     let waterAmount = 0
     let mistAmount = 0
+    let fertAmount = 0
 
     if (waterings) {
         waterAmount = waterings[0].amount
@@ -123,6 +139,11 @@ app.get('/plant/:code', (req, res) => {
         lastMisted = daysSinceText(mistings)
     }
 
+    if (fertilizations)  {
+        fertAmount = fertilizations[0].amount
+        lastFertilized = daysSinceFertText(fertilizations)
+    }
+
     if (careActions) {
         for (const c of careActions) {
             const dateTime = formatDate(c.watered_at)
@@ -132,33 +153,34 @@ app.get('/plant/:code', (req, res) => {
             c.time = time     
         }
     }
-
-    console.log('VITTU HUORA!')
-    console.log(fertilizerList)
-    res.render('plant' , { plant, lastWatered, lastMisted, waterAmount, mistAmount, careActions, fertilizerList })
+    res.render('plant' , { plant, lastWatered, lastMisted, lastFertilized, waterAmount, mistAmount, fertAmount, careActions, fertilizerList })
 })
 
 app.post('/plant/:code/fertilizations', (req, res) => {
     const timeStamp = Date.now()
     const fertilization = req.body
-
-    console.log('fertilizing on server')
     fertilization.fertilizedAt = timeStamp
 
     const insertedFertilization = insertFertilization(db, fertilization)
+
+    if (insertedFertilization) {
+        const dateTime = formatDate(insertedFertilization.fertilized_at)
+        const daysSince = daysSinceFertText([insertedFertilization])
+
+        insertedFertilization.date = dateTime.date
+        insertedFertilization.time = dateTime.time
+
+        res.json({ fertilization: insertedFertilization, daysSince: daysSince })
+    }
 })
 
 app.post('/plant/:code/waterings', (req, res) => {
     const timeStamp = Date.now()
     const watering = req.body
-
-    console.log('watering on server')
-    console.log(watering)
     watering.wateredAt = timeStamp
     
     const insertedWatering = insertWatering(db, watering)
     
-
     if (insertedWatering) {
         const dateTime = formatDate(insertedWatering.watered_at)
         const daysSince = daysSinceText([insertedWatering])
@@ -175,10 +197,7 @@ app.post('/plant/:code/waterings', (req, res) => {
 })
 
 app.delete('/plant/:code/waterings/:id', (req, res) => {
-    console.log('TRYING TO DELETE')
     const wateringId = req.params.id
-    console.log(req.params)
-    console.log(`wateringId: ${wateringId}`)
     const info = deleteWatering(wateringId)
     if (info.changes > 0) {
         res.status(200).json({ success: true })

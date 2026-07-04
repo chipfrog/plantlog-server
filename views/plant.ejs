@@ -12,6 +12,7 @@
             data-care-actions="<%= careActions %>"
             data-water-amount="<%= waterAmount %>"
             data-mist-amount="<%= mistAmount %>"
+            data-fert-amount="<%= fertAmount %>"
             data-fertilizer-list="<%= fertilizerList %>"
         >
             <div id="info-view">
@@ -50,8 +51,8 @@
                                 <div class="progress-bar fertilizer" role="progressbar">
                                     <img class="progress-bar-icon" src="/icons/tractor.svg">
                                 </div>
-                                <div>-</div>
-                                <div style="font-size: small;">No records</div>
+                                <div id="last-fert-amount"></div>
+                                <div id="last-fert-date" style="font-size: small;"><%= lastFertilized %></div>
                             </div>
 
                         </div>
@@ -149,7 +150,7 @@
                     </button>
                     <select name="fertilizer-select" id="fertilizer-select">
                         <% fertilizerList.forEach((f)=> { %>
-                            <option value="f.brand">
+                            <option value="<%= f.id %>">
                                 <p><%= f.brand %></p>
                             </option>
                         })
@@ -159,9 +160,9 @@
                 <div class="fert-main-content">
                     <img id="cup-icon" src="/icons/measure-cup.png" alt="">
                     <div id="fert-controls">
-                        <button id="remove-fert" class="command-bar-btn"><img src="/icons/arrow_back_simple.svg" alt=""></button>
+                        <button id="decrease-fert" class="command-bar-btn"><img src="/icons/arrow_back_simple.svg" alt=""></button>
                         <div id="fert-count">1</div>
-                        <button id="add-fert" class="command-bar-btn"><img src="/icons/arrow_forward_simple.svg" alt=""></button>
+                        <button id="increase-fert" class="command-bar-btn"><img src="/icons/arrow_forward_simple.svg" alt=""></button>
                     </div>
                     <button id="save-fert"><img src="/icons/add.svg" alt=""></button>
                 </div>
@@ -221,8 +222,6 @@
                 clone.querySelector('.delete-btn').id = `watering-${a.id}`
                 container.appendChild(clone)
             })
-
-
 
         </script>
         <script src="/plantview.js" type="module" defer></script>

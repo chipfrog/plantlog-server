@@ -20,6 +20,9 @@ const lastWateredDate = document.getElementById("last-watered-date")
 const lastMistedAmount = document.getElementById("last-misted-amount")
 const lastMistedDate = document.getElementById("last-misted-date")
 
+const lastFertAmount = document.getElementById("last-fert-amount")
+const lastFertDate = document.getElementById("last-fert-date")
+
 const mistedText = document.getElementById("last-misted")
 const waterRect = document.getElementById("water_rect")
 const waterSVG = document.getElementById("water-drop-svg")
@@ -44,17 +47,18 @@ const closeFertilizeBtn = document.getElementById("close-fertilize-btn")
 const cycleIcon = document.getElementById("cycle-icon")
 const unitTypeBtn = document.getElementById("unit-types-btn")
 
-const removeFertBtn = document.getElementById("remove-fert");
-const addFertBtn = document.getElementById("add-fert")
+const decreaseFert = document.getElementById("decrease-fert");
+const increaseFert = document.getElementById("increase-fert")
 const fertCount = document.getElementById("fert-count")
 const saveFertBtn = document.getElementById("save-fert")
+const fertSelect = document.getElementById("fertilizer-select")
 
 const plantCode = mainApp.dataset.plantCode
 const initWaterAmount = mainApp.dataset.waterAmount
 const initMistAmount = mainApp.dataset.mistAmount
+const initFertAmount = mainApp.dataset.fertAmount
 
 const root = document.querySelector(':root')
-
 
 const waterAmountDesc = {
     xxs: "Nothing",
@@ -112,6 +116,7 @@ init()
 function init() {
     updateLastWateredInfo(initWaterAmount)
     updateLastMistedInfo(initMistAmount)
+    updateLastFertilizedInfo(initFertAmount)
 }
 
 function updateLastWateredInfo(amount) {
@@ -130,6 +135,41 @@ function updateLastMistedInfo(amount) {
         lastMistedAmount.innerText = amount
     }
     updateMistProgressBar(amount)
+}
+
+function updateLastFertilizedInfo(amount) {
+    if (isNumeric(amount)) {
+        lastFertAmount.innerText = `${parseInt(amount)} cups`
+    } else {
+        lastFertAmount.innerText = amount
+    }
+}
+
+async function addFertilization(payload) {
+    const url = `/plant/${encodeURIComponent(plantCode)}/fertilizations`
+
+    try {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type":  "application/json "},
+            body: JSON.stringify(payload)
+        })
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}))
+            throw new Error(err.message || `HTTP ${res.status}`)
+        }
+        const updateData = await res.json()
+        const amount = updateData.fertilization.amount
+        const daysSince = updateData.daysSince
+
+        updateLastFertilizedInfo(amount)
+        lastFertDate.innerText = daysSince
+
+    } catch(e) {
+        console.log(e)
+        alert("Failed to log fertilization.");
+    }
 }
  
 async function addWatering() {
@@ -153,7 +193,6 @@ async function addWatering() {
         const amount = updateData.watering.amount
         const daysSince = updateData.daysSince 
 
-        console.log(updateData)
 
         if (updateData.type == 'water') {
             updateLastWateredInfo(amount)
@@ -161,7 +200,6 @@ async function addWatering() {
             addHistoryEntry(updateData)
 
         } else if (updateData.type == 'mist') {
-
             updateLastMistedInfo(amount)
             lastMistedDate.innerText = daysSince
             addHistoryEntry(updateData)
@@ -211,10 +249,6 @@ function hideDeleteConfirmation() {
     setTimeout(() => {
         deleteConfirmation.classList.remove('increase-Zindex')
     }, 500)
-}
-
-function addFertilization() {
-
 }
 
 actionList.addEventListener('click', (e) => {
@@ -530,7 +564,7 @@ waterSVG.addEventListener('touchmove', (e) => {
 
 // Fertilization
 
-addFertBtn.addEventListener('click', (e) => {
+increaseFert.addEventListener('click', (e) => {
     e.preventDefault()
     let currCount = Number(fertCount.textContent)
     if (currCount < 9) {
@@ -539,7 +573,7 @@ addFertBtn.addEventListener('click', (e) => {
     }
 })
 
-removeFertBtn.addEventListener('click', (e)  => {
+decreaseFert.addEventListener('click', (e)  => {
     e.preventDefault()
     let currCount = Number(fertCount.textContent)
     if (currCount > 1) {
@@ -550,6 +584,15 @@ removeFertBtn.addEventListener('click', (e)  => {
 
 saveFertBtn.addEventListener('click', (e) => {
     e.preventDefault()
-    console.log('click')
+    const fertId = Number(fertSelect.value)
+    const amount = Number(fertCount.textContent)
+
+    const payload = {
+        fertId: fertId,
+        amount: amount,
+        plantCode: plantCode
+    }
+    console.log(payload)
+    addFertilization(payload)
 })
 

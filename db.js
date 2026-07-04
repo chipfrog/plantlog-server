@@ -73,7 +73,6 @@ export function initDatabase(env) {
 export function insertPlant(db, plant) {
     const insert = db.prepare('INSERT INTO PLANTS (code, name, latin_name, image_path, date_acquired) VALUES (?, ?, ?, ?, ?)')
     const info = insert.run(plant.code, plant.name, plant.latinName, plant.imagePath, plant.dateAquired )
-    // console.log(info.changes)
 }
 
 export function insertWatering(db, watering) {
@@ -81,22 +80,29 @@ export function insertWatering(db, watering) {
     const stmt = db.prepare('INSERT INTO WATERINGS (plant_id, watered_at, method, amount) VALUES (?, ?, ?, ?)')
     const info = stmt.run(plantId, watering.wateredAt, watering.method, watering.amount)
     if (info.changes > 0) {
-        return getWateringById(info.lastInsertRowid)
+        return getWateringsById(info.lastInsertRowid)
     }
     return false
 }
 
 export function inserFertilizer(db, fertilizer) {
     const insert = db.prepare('INSERT INTO FERTILIZERS (brand, product_name, form) VALUES (?, ?, ?)')
-    console.log('before insertion')
-    console.log(fertilizer)
     const info = insert.run(fertilizer.brand, fertilizer.productName, fertilizer.form )
 }
 
 export function insertFertilization(db, fertilization) {
+
+    console.log('INSERT FERTILIZATION IN DB')
+    console.log(fertilization)
     const plantId = getPlantId(db, fertilization.plantCode)
-    const insert = db.prepare('INSERT INTO FERTILIZATIONS (plant_id, fertilizer_id, fertilized_at, amount)')
+
+    const insert = db.prepare('INSERT INTO FERTILIZATIONS (plant_id, fertilizer_id, fertilized_at, amount) VALUES (?, ?, ?, ?)')    
     const info = insert.run(plantId, fertilization.fertId, fertilization.fertilizedAt, fertilization.amount)
+    
+    if (info.changes > 0) {
+        return getFertilizationsById(info.lastInsertRowid)
+    }
+    return false
 }
 
 export function getFertilizerId(db, code) {
@@ -145,10 +151,29 @@ export function getWaterings(db, code) {
     return waterings
 }
 
-function getWateringById(id) {
+function getWateringsById(id) {
     const stmt = db.prepare("SELECT * FROM waterings WHERE id = ?")
     const watering = stmt.get(id)
     return watering
+}
+
+function getFertilizationsById(id) {
+    const stmt = db.prepare("SELECT * FROM fertilizations WHERE id = ?")
+    const fertilization = stmt.get(id)
+    return fertilization
+}
+
+export function getFertilizations(db, code) {
+    const plantId = getPlantId(db, code)
+    const stmt = db.prepare("SELECT * FROM fertilizations WHERE plant_id = ? ORDER BY fertilized_at DESC")
+    const fertilizations = stmt.all(plantId)
+    
+    if (fertilizations.length < 1) {
+        console.log('No fertilizations recorded for plant ' + code)
+        return null
+    }
+    console.log(fertilizations)
+    return fertilizations
 }
 
 export function deleteWatering(id) {
