@@ -50,7 +50,7 @@ export function initDatabase(env) {
             id INTEGER PRIMARY KEY,
             brand TEXT,
             product_name TEXT,
-            type TEXT,
+            form TEXT,
             npk TEXT
         );
 
@@ -87,15 +87,16 @@ export function insertWatering(db, watering) {
 }
 
 export function inserFertilizer(db, fertilizer) {
-    const insert = db.prepare('INSERT INTO FERTILIZERS (brand, product_name, type) VALUES (?, ?, ?)')
-    const info = insert.run(fertilizer.brand, fertilizer.name, fertilizer.type )
-    console.log(info)
+    const insert = db.prepare('INSERT INTO FERTILIZERS (brand, product_name, form) VALUES (?, ?, ?)')
+    console.log('before insertion')
+    console.log(fertilizer)
+    const info = insert.run(fertilizer.brand, fertilizer.productName, fertilizer.form )
 }
 
 export function insertFertilization(db, fertilization) {
     const plantId = getPlantId(db, fertilization.plantCode)
     const insert = db.prepare('INSERT INTO FERTILIZATIONS (plant_id, fertilizer_id, fertilized_at, amount)')
-    // const info = insert.run(plantId, fertilization)
+    const info = insert.run(plantId, fertilization.fertId, fertilization.fertilizedAt, fertilization.amount)
 }
 
 export function getFertilizerId(db, code) {
@@ -188,8 +189,16 @@ export function getPlants(db) {
     console.log(plants)
 }
 
+export function getFertilizers(db)  {
+    const getAll = db.prepare('SELECT * FROM fertilizers')
+    const fertilizers = getAll.all()
+    return fertilizers;
+}
+
 export function eraseAllData(db) {
-    const deleteAll = db.prepare('DELETE FROM plants')
-    const info = deleteAll.run()
-    console.log(info)
+    const deleteAllPlants = db.prepare('DELETE FROM plants')
+    const deleteAllFertilizers = db.prepare('DELETE FROM fertilizers')
+
+    deleteAllPlants.run()
+    deleteAllFertilizers.run()
 }

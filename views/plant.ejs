@@ -12,6 +12,7 @@
             data-care-actions="<%= careActions %>"
             data-water-amount="<%= waterAmount %>"
             data-mist-amount="<%= mistAmount %>"
+            data-fertilizer-list="<%= fertilizerList %>"
         >
             <div id="info-view">
                 <div id="img-container">
@@ -146,6 +147,14 @@
                     <button id="close-fertilize-btn" class="round-btn">
                         <img class="close-btn-icon" src="/icons/arrow_back.svg">
                     </button>
+                    <select name="fertilizer-select" id="fertilizer-select">
+                        <% fertilizerList.forEach((f)=> { %>
+                            <option value="f.brand">
+                                <p><%= f.brand %></p>
+                            </option>
+                        })
+                        <% }) %>
+                    </select>
                 </div>
                 <div class="fert-main-content">
                     <img id="cup-icon" src="/icons/measure-cup.png" alt="">
@@ -212,6 +221,9 @@
                 clone.querySelector('.delete-btn').id = `watering-${a.id}`
                 container.appendChild(clone)
             })
+
+
+
         </script>
         <script src="/plantview.js" type="module" defer></script>
     </body>

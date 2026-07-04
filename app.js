@@ -14,10 +14,14 @@ import {
     insertWatering,
     deleteWatering,
     getMistings,
-    getAllCareActions,    
+    getAllCareActions,
+    inserFertilizer,
+    getFertilizers,
+    insertFertilization,    
 } from './db.js'
 
 import Plant from './plant.js'
+import Fertilizer from './fertilizer.js'
 import { formatDate, getDaysSince } from './utils.js'
 
 dotenv.config()
@@ -38,6 +42,8 @@ app.use(express.json());
 initDatabase(env)
 const db = getDatabase()
 
+
+//  "test" or "production"
 if (env === 'test') {
     eraseAllData(db)
 
@@ -61,6 +67,12 @@ if (env === 'test') {
     const misting_1 = { plantCode: 'PEI-2025-01', method: 'mist', amount: 'Sprinkle', wateredAt:  1759314489000 }
     insertWatering(db, misting_1)
 
+    const fert1 = new Fertilizer({
+        brand: "Substral",
+        productName: "Ready to Use Yleislannoite",
+        form: "liquid"
+    })
+    inserFertilizer(db, fert1)
 }
 
 function daysSinceText(waterings) {
@@ -93,6 +105,8 @@ app.get('/plant/:code', (req, res) => {
     const waterings = getWaterings(db, plantCode)
     const mistings = getMistings(db, plantCode)
     const careActions = getAllCareActions(db, plantCode)
+    
+    const fertilizerList = getFertilizers(db)
 
     let lastWatered = "No records"
     let lastMisted = "No records"
@@ -118,7 +132,20 @@ app.get('/plant/:code', (req, res) => {
             c.time = time     
         }
     }
-    res.render('plant' , { plant, lastWatered, lastMisted, waterAmount, mistAmount, careActions })
+
+    console.log('VITTU HUORA!')
+    console.log(fertilizerList)
+    res.render('plant' , { plant, lastWatered, lastMisted, waterAmount, mistAmount, careActions, fertilizerList })
+})
+
+app.post('/plant/:code/fertilizations', (req, res) => {
+    const timeStamp = Date.now()
+    const fertilization = req.body
+
+    console.log('fertilizing on server')
+    fertilization.fertilizedAt = timeStamp
+
+    const insertedFertilization = insertFertilization(db, fertilization)
 })
 
 app.post('/plant/:code/waterings', (req, res) => {

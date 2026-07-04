@@ -206,8 +206,10 @@ li {
 }
 
 #close-fertilize-btn {
-    position: absolute;
-    left: 1.5rem;
+    margin-left: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .fert-main-content {
@@ -251,6 +253,10 @@ li {
     border-radius: 20%;
 }
 
+#fertilizer-select {
+    margin-right: 1.5rem;
+}
+
 #cup-icon {
     height: 200px;
 }
@@ -286,18 +292,17 @@ li {
 #close-water-btn {
     position: absolute;
     left: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #close-history-btn {
     position: absolute;
     right: 1.5rem;
-}
-
-.close-btn-icon {
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%,-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #top-row h1 {
@@ -449,9 +454,15 @@ li {
 
 .care-top-row {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 50px;
     padding: 6px;
     padding-left: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #history-view {
