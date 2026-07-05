@@ -86,7 +86,7 @@ const waterTitleMap = new Map([
 ])
 
 const wateringIcons = new Map([
-    ['top', '/icons/shower.svg'], ['bottom', '/icons/glass.svg'], ['mist', '/icons/spray.svg']
+    ['top', '/icons/shower.svg'], ['bottom', '/icons/glass.svg'], ['mist', '/icons/spray.svg'], ['fert', '/icons/tractor.svg']
 ])
 
 const maxDeg = 280 // For progress circles in degrees
@@ -165,6 +165,7 @@ async function addFertilization(payload) {
 
         updateLastFertilizedInfo(amount)
         lastFertDate.innerText = daysSince
+        addHistoryEntry(updateData, 'fertilization')
 
     } catch(e) {
         console.log(e)
@@ -213,24 +214,36 @@ async function addWatering() {
 }
 
 function addHistoryEntry(update, type) {
-    let amount = update.watering.amount
-
-    if (isNumeric(amount)) {
-        amount = parseInt(amount)
-        if (type === 'water') {
-            amount += ' ml' 
-        } else {
-            amount += ' cups'
-        }
-    }
-
+    let amount
     const instance = historyItemTemplate.content.cloneNode(true)
-    instance.querySelector('.history-title').textContent = waterTitleMap.get(update.watering.method)
-    instance.querySelector('.watering-icon').src = wateringIcons.get(update.watering.method)
-    instance.querySelector('.date-val').textContent = update.watering.date
-    instance.querySelector('.time-val').textContent = update.watering.time
-    instance.querySelector('.water-amount').textContent = amount
-    instance.querySelector('.delete-btn').id = `watering-${update.watering.id}`
+    
+    if (type === 'water') {
+        amount = update.watering.amount
+        
+        if (isNumeric(amount)) {
+            amount = parseInt(amount)
+            amount += ' ml' 
+        }
+
+        instance.querySelector('.history-title').textContent = waterTitleMap.get(update.watering.method)
+        instance.querySelector('.watering-icon').src = wateringIcons.get(update.watering.method)
+        instance.querySelector('.date-val').textContent = update.watering.date
+        instance.querySelector('.time-val').textContent = update.watering.time
+        instance.querySelector('.water-amount').textContent = amount
+        instance.querySelector('.delete-btn').id = `watering-${update.watering.id}`
+
+    } else if (type === 'fertilization') {
+        amount = update.fertilization.amount
+        amount += ' cups'
+
+        instance.querySelector('.history-title').textContent = 'Fertilization'
+        instance.querySelector('.watering-icon').src = wateringIcons.get('fert')
+        instance.querySelector('.date-val').textContent = update.fertilization.date
+        instance.querySelector('.time-val').textContent = update.fertilization.time
+        instance.querySelector('.water-amount').textContent = amount
+        instance.querySelector('.delete-btn').id = `fertilization-${update.fertilization.id}`
+
+    }
 
     console.log(instance)
     actionList.prepend(instance)
