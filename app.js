@@ -14,7 +14,7 @@ import {
     insertWatering,
     deleteWatering,
     getMistings,
-    getAllCareActions,
+    getAllWaterings,
     inserFertilizer,
     getFertilizers,
     insertFertilization,
@@ -73,6 +73,9 @@ if (env === 'test') {
         form: "liquid"
     })
     inserFertilizer(db, fert1)
+
+    const fertEvent1 = { plantCode: 'PEI-2025-01', fertId: 1, fertilizedAt: 1759314489500, amount: 3 }
+    insertFertilization(db, fertEvent1)
 }
 
 function daysSinceText(watering) {
@@ -113,13 +116,32 @@ app.get('/', (req, res) => {
 
 app.get('/plant/:code', (req, res) => {
     const plantCode = req.params.code
+    console.log('plantCode: ' + plantCode)
+
+
     const plant = getPlant(db, plantCode)
     const waterings = getWaterings(db, plantCode)
     const mistings = getMistings(db, plantCode)
-    const fertilizations = getFertilizations(db, plantCode)
-    const careActions = getAllCareActions(db, plantCode)
-    
     const fertilizerList = getFertilizers(db)
+    
+    const fertilizations = getFertilizations(db, plantCode).map(f => ({
+        ...f,
+        type: "fertilization",
+        date: f.fertilized_at
+    }))
+
+    const allWaterings = getAllWaterings(db, plantCode).map(w => ({
+        ...w,
+        type: "watering",
+        date: w.watered_at
+    }))
+
+    const careActions  = allWaterings.concat(fertilizations)
+    careActions.sort((a, b) => b.date - a.date)
+
+    console.log('CAREACTIONS')
+    console.log(careActions)
+
 
     let lastWatered = "No records"
     let lastMisted = "No records"
@@ -128,29 +150,31 @@ app.get('/plant/:code', (req, res) => {
     let waterAmount = 0
     let mistAmount = 0
     let fertAmount = 0
+    
 
-    if (waterings) {
+    if (waterings.length > 0) {
         waterAmount = waterings[0].amount
         lastWatered = daysSinceText(waterings)
     }
 
-    if (mistings) {
+    if (mistings.length > 0) {
         mistAmount = mistings[0].amount
         lastMisted = daysSinceText(mistings)
     }
 
-    if (fertilizations)  {
+    if (fertilizations.length > 0)  {
         fertAmount = fertilizations[0].amount
         lastFertilized = daysSinceFertText(fertilizations)
     }
 
     if (careActions) {
         for (const c of careActions) {
-            const dateTime = formatDate(c.watered_at)
-            const date = dateTime.date
-            const time = dateTime.time
-            c.date = date
-            c.time = time     
+            let dateTime
+            if (c.type === 'watering') { dateTime = formatDate(c.watered_at) }
+            else { dateTime = formatDate(c.fertilized_at) }
+            
+            c.date = dateTime.date
+            c.time = dateTime.time   
         }
     }
     res.render('plant' , { plant, lastWatered, lastMisted, lastFertilized, waterAmount, mistAmount, fertAmount, careActions, fertilizerList })

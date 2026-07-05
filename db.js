@@ -91,9 +91,6 @@ export function inserFertilizer(db, fertilizer) {
 }
 
 export function insertFertilization(db, fertilization) {
-
-    console.log('INSERT FERTILIZATION IN DB')
-    console.log(fertilization)
     const plantId = getPlantId(db, fertilization.plantCode)
 
     const insert = db.prepare('INSERT INTO FERTILIZATIONS (plant_id, fertilizer_id, fertilized_at, amount) VALUES (?, ?, ?, ?)')    
@@ -106,19 +103,17 @@ export function insertFertilization(db, fertilization) {
 }
 
 export function getFertilizerId(db, code) {
-    console.log('getting fertilizerId with code: ' + code)
     const stmt = db.prepare("SELECT id FROM fertilizers WHERE ")
 }
 
 export function getPlantId(db, code) {
-    console.log('Getting plantID with code: ' + code)
     const stmt = db.prepare("SELECT id FROM plants WHERE code = ?")
     const plantId = stmt.get(code).id
+    console.log(`plantId: ${plantId}`)
     return plantId
 }
 
 export function getPlant(db, code) {
-    console.log(`getPlant: ${code}`)
     const stmt = db.prepare("SELECT * FROM plants WHERE code = ?")
     const dbPlant = stmt.get(code)
 
@@ -139,13 +134,14 @@ export function getPlant(db, code) {
     return plant
 }
 
+// Only top and bottom waterings
 export function getWaterings(db, code) {
+    console.log('code: ' + code)
     const plantId = getPlantId(db, code)
     const stmt = db.prepare("SELECT * FROM waterings WHERE plant_id = ? AND method IN ('top', 'bottom') ORDER BY watered_at DESC")
     const waterings = stmt.all(plantId)
     if (waterings.length < 1) {
         console.log(`No waterings recorded for plant ${code}`)
-        return null
     }
     console.log(waterings)
     return waterings
@@ -170,7 +166,6 @@ export function getFertilizations(db, code) {
     
     if (fertilizations.length < 1) {
         console.log('No fertilizations recorded for plant ' + code)
-        return null
     }
     console.log(fertilizations)
     return fertilizations
@@ -189,21 +184,19 @@ export function getMistings(db, code) {
     const mistings = stmt.all(plantId)
     if (mistings.length < 1) {
         console.log(`No mistings recorded for plant ${code}`)
-        return null
     }
     console.log(mistings)
     return mistings
 }
 
-export function getAllCareActions(db, code) {
+// waterings including mistings
+export function getAllWaterings(db, code) {
     const plantId = getPlantId(db, code)
     const stmt = db.prepare("SELECT * FROM waterings WHERE plant_id = ? ORDER BY watered_at DESC")
     const actions = stmt.all(plantId)
     if (actions.length < 1) {
         console.log(`No care actions recorded for plant ${code}`)
-        return null
     }
-    console.log(actions)
     return actions
 }
 

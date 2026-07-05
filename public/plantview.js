@@ -193,16 +193,15 @@ async function addWatering() {
         const amount = updateData.watering.amount
         const daysSince = updateData.daysSince 
 
-
         if (updateData.type == 'water') {
             updateLastWateredInfo(amount)
             lastWateredDate.innerText = daysSince
-            addHistoryEntry(updateData)
+            addHistoryEntry(updateData, 'water')
 
         } else if (updateData.type == 'mist') {
             updateLastMistedInfo(amount)
             lastMistedDate.innerText = daysSince
-            addHistoryEntry(updateData)
+            addHistoryEntry(updateData, 'water')
         }
 
     } catch(e) {
@@ -213,12 +212,16 @@ async function addWatering() {
     showStatusInBtn(wateringSuccess)
 }
 
-function addHistoryEntry(update) {
+function addHistoryEntry(update, type) {
     let amount = update.watering.amount
 
     if (isNumeric(amount)) {
         amount = parseInt(amount)
-        amount += ' ml' 
+        if (type === 'water') {
+            amount += ' ml' 
+        } else {
+            amount += ' cups'
+        }
     }
 
     const instance = historyItemTemplate.content.cloneNode(true)

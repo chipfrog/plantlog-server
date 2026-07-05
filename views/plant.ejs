@@ -161,7 +161,7 @@
                     <img id="cup-icon" src="/icons/measure-cup.png" alt="">
                     <div id="fert-controls">
                         <button id="decrease-fert" class="command-bar-btn"><img src="/icons/arrow_back_simple.svg" alt=""></button>
-                        <div id="fert-count">1</div>
+                        <p id="fert-count">1</p>
                         <button id="increase-fert" class="command-bar-btn"><img src="/icons/arrow_forward_simple.svg" alt=""></button>
                     </div>
                     <button id="save-fert"><img src="/icons/add.svg" alt=""></button>
@@ -198,7 +198,7 @@
             ])
 
             const wateringIcons = new Map([
-                ['top', '/icons/shower.svg'], ['bottom', '/icons/glass.svg'], ['mist', '/icons/spray.svg']
+                ['top', '/icons/shower.svg'], ['bottom', '/icons/glass.svg'], ['mist', '/icons/spray.svg'], ['fert', '/icons/tractor.svg']
             ])
 
             function isNumeric(val) {
@@ -206,20 +206,35 @@
             }
 
             actions.forEach(a => {
+                const clone = template.content.cloneNode(true)
                 let amount = a.amount
+                console.log(a)
 
-                if (isNumeric(a.amount)) {
-                    amount = parseInt(amount)
-                    amount += ' ml'
+                if (a.type === 'watering') {
+
+                    if (isNumeric(a.amount)) {
+                        amount = parseInt(amount)
+                        amount += ' ml'
+                    }
+                    clone.querySelector('.history-title').textContent = waterTitleMap.get(a.method)
+                    clone.querySelector('.watering-icon').src = wateringIcons.get(a.method)
+                    clone.querySelector('.date-val').textContent = a.date
+                    clone.querySelector('.time-val').textContent = a.time
+                    clone.querySelector('.water-amount').textContent = amount
+                    clone.querySelector('.delete-btn').id = `watering-${a.id}`
                 }
 
-                const clone = template.content.cloneNode(true)
-                clone.querySelector('.history-title').textContent = waterTitleMap.get(a.method)
-                clone.querySelector('.watering-icon').src = wateringIcons.get(a.method)
-                clone.querySelector('.date-val').textContent = a.date
-                clone.querySelector('.time-val').textContent = a.time
-                clone.querySelector('.water-amount').textContent = amount
-                clone.querySelector('.delete-btn').id = `watering-${a.id}`
+                else if (a.type === 'fertilization') {
+                    amount = parseInt(amount)
+                    amount += ' cups'
+
+                    clone.querySelector('.history-title').textContent = 'Fertilization'
+                    clone.querySelector('.watering-icon').src = wateringIcons.get('fert')
+                    clone.querySelector('.date-val').textContent = a.date
+                    clone.querySelector('.time-val').textContent = a.time
+                    clone.querySelector('.water-amount').textContent = amount
+                }
+
                 container.appendChild(clone)
             })
 
