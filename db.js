@@ -14,11 +14,14 @@ export function getDatabase() {
 export function initDatabase(env) {
     if (db) return db // Makes sure only on database connection is created, if multiple calls to initDatabase()
     if (env === 'production') {        
-        dbPath = path.join('/plantlog/data', 'production.db')
+        dbPath = path.join(".", "data", "production.db")
         
     } else if (env === 'test') {
         dbPath = path.join('./data/test.db')
     }
+
+    console.log({ env, dbPath });
+    console.log("cwd:", process.cwd());
 
     db = new Database(dbPath)
     db.exec("PRAGMA foreign_keys = ON;")
