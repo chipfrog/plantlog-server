@@ -264,7 +264,7 @@ actionList.addEventListener('click', (e) => {
 
 deleteConfirmationBtn.addEventListener('click', (e) => {
     hideDeleteConfirmation()
-    deleteWatering()
+    deleteCareEvent()
 })
 
 cancelConfirmationBtn.addEventListener('click', (e) => {
@@ -272,10 +272,17 @@ cancelConfirmationBtn.addEventListener('click', (e) => {
     tempDelBtn = null
 })
 
-async function deleteWatering() {
-    const id = tempDelBtn.id.split("-")[1]
+async function deleteCareEvent() {
+    let url
+    const [type, id] = tempDelBtn.id.split("-")
     console.log('wateringId: ' + id)
-    const url = `/plant/${encodeURIComponent(plantCode)}/waterings/${encodeURIComponent(id)}`
+    
+    if (type === 'watering') {
+        url = `/plant/${encodeURIComponent(plantCode)}/waterings/${encodeURIComponent(id)}`
+    }
+    else if (type === 'fertilization') {
+        url = `/plant/${encodeURIComponent(plantCode)}/fertilizations/${encodeURIComponent(id)}`
+    } 
 
     try {
         const res = await fetch(url, { method: "DELETE" })

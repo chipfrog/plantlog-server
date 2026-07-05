@@ -120,7 +120,7 @@
                         Hold to Water
                     </button>
                 </div>
-            </div>
+            </div>confirmation
             <div id="history-view">
                 <div id="delete-confirmation">
                     <div class="confirmation">
@@ -233,6 +233,7 @@
                     clone.querySelector('.date-val').textContent = a.date
                     clone.querySelector('.time-val').textContent = a.time
                     clone.querySelector('.water-amount').textContent = amount
+                    clone.querySelector('.delete-btn').id = `fertilization-${a.id}`
                 }
 
                 container.appendChild(clone)

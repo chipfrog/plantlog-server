@@ -18,7 +18,8 @@ import {
     inserFertilizer,
     getFertilizers,
     insertFertilization,
-    getFertilizations,    
+    getFertilizations,
+    deleteFertilization,    
 } from './db.js'
 
 import Plant from './plant.js'
@@ -223,6 +224,16 @@ app.post('/plant/:code/waterings', (req, res) => {
 app.delete('/plant/:code/waterings/:id', (req, res) => {
     const wateringId = req.params.id
     const info = deleteWatering(wateringId)
+    if (info.changes > 0) {
+        res.status(200).json({ success: true })
+    } else {
+        res.status(404).json({ error: 'Item not found' })
+    }
+})
+
+app.delete('/plant/:code/fertilizations/:id', (req, res) => {
+    const fertId = req.params.id
+    const info = deleteFertilization(fertId)
     if (info.changes > 0) {
         res.status(200).json({ success: true })
     } else {

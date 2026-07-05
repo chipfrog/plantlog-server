@@ -178,6 +178,13 @@ export function deleteWatering(id) {
     return info
 }
 
+export function deleteFertilization(id) {
+    const stmt = db.prepare("DELETE FROM fertilizations WHERE id = ?")
+    const info = stmt.run(id)
+    console.log(info)
+    return info
+}
+
 export function getMistings(db, code) {
     const plantId = getPlantId(db, code)
     const stmt = db.prepare("SELECT * FROM waterings WHERE plant_id = ? AND method = 'mist' ORDER BY watered_at DESC")
