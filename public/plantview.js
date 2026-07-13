@@ -41,6 +41,8 @@ const closeWaterViewBtn = document.getElementById("close-water-btn")
 const timelineBtn = document.getElementById("timeline-btn")
 const closeTimelineViewBtn = document.getElementById("close-history-btn")
 
+const fertSliderHandle  = document.getElementById("fert-handle")
+const fertSlider = document.getElementById("fert-slider")
 const fertilizeBtn = document.getElementById("fertilize-btn")
 const closeFertilizeBtn = document.getElementById("close-fertilize-btn")
 
@@ -110,6 +112,11 @@ let waterSliderVal = 0 // for animating slider, 1 ml accuracy for smoother anima
 let wateringSuccess = false
 
 let tempDelBtn = null
+
+let mouseX
+let mouseY
+let fertDragging = false
+
 
 init()
 
@@ -562,12 +569,33 @@ waterSVG.addEventListener('mousedown', (e) => {
 document.addEventListener('mouseup', (e) => {
     e.preventDefault()
     dragging = false
+    fertDragging = false
 })
 
 document.addEventListener('mousemove', (e) => {
     e.preventDefault()
+    mouseY = e.clientY
+    mouseX = e.clientX
+    
+    // Water slider
     if (dragging && !wateringSuccess && !emptying) {
-        convertYToSvgCoordinates(e.clientY)
+        convertYToSvgCoordinates(mouseY)
+    }
+
+    // Fert slider
+    if (fertDragging) {
+        const rect = fertSlider.getBoundingClientRect()
+        let relPos = mouseX - rect.left - 23
+
+        if (relPos < 0) {
+            relPos = 0
+        }
+        else if (relPos > rect.width - 46) {
+            console.log('YLI OIKEA')
+            relPos = rect.width - 46
+        }
+
+        fertSliderHandle.style.setProperty("left", `${relPos}px`)
     }
 })
 
@@ -577,6 +605,7 @@ waterSVG.addEventListener('touchstart', (e) => {
 
 document.addEventListener('touchend', (e) => {
     dragging = false
+    fertDragging = false
 })
 
 waterSVG.addEventListener('touchmove', (e) => {
@@ -586,6 +615,11 @@ waterSVG.addEventListener('touchmove', (e) => {
 })
 
 // Fertilization
+
+fertSliderHandle.addEventListener('mousedown', (e) => {
+    e.preventDefault()
+    fertDragging = true
+})
 
 increaseFert.addEventListener('click', (e) => {
     e.preventDefault()

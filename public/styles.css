@@ -234,6 +234,30 @@ li {
     font-size: xx-large;
 }
 
+.slider {
+    position: relative;
+    width: 250px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+
+.slider-handle {
+    position: absolute;
+    left: 0;
+    height: 46px;
+    width: 46px;
+    border-radius: 25px;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+#fert-handle {
+    left: 0;
+
+}
+
 #save-fert {
     margin-top: 4rem;
     height: 50px;
@@ -242,6 +266,7 @@ li {
     display: flex;
     justify-content: center;
     align-items: center;
+    display: none;
 }
 
 .fert-btn {
@@ -371,7 +396,7 @@ li {
     transition: transform .5s ease;
 }
 
-#water-btn-row {
+.slider-btn-row {
     position: absolute;
     bottom: 0;
     width: 100%;
