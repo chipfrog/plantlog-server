@@ -114,6 +114,7 @@ let wateringSuccess = false
 let tempDelBtn = null
 
 let fertDragging = false
+let fertSavingInProcess = false
 
 
 init()
@@ -579,7 +580,7 @@ document.addEventListener('mousemove', (e) => {
     }
 
     // Fert slider
-    if (fertDragging) {
+    if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.clientX)
     }
 })
@@ -604,7 +605,7 @@ waterSVG.addEventListener('touchmove', (e) => {
 })
 
 fertSliderHandle.addEventListener('touchmove', (e) => {
-    if (fertDragging) {
+    if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.touches[0].clientX)
     }
 })
@@ -614,11 +615,12 @@ const handleFertDragging = (x) => {
     let relPos = x - rect.left - 23
 
     if (relPos < 0) {
-        relPos = 0
+        relPos = -2
     }
-    else if (relPos > rect.width - 46) {
-        console.log('YLI OIKEA')
-        relPos = rect.width - 46
+    else if (relPos > rect.width - 80) {
+        relPos = rect.width - 72
+        saveFertilization()
+        fertSavingInProcess = true
     }
 
     fertSliderHandle.style.setProperty("left", `${relPos}px`)
@@ -648,6 +650,19 @@ decreaseFert.addEventListener('click', (e)  => {
         fertCount.textContent = currCount
     }
 })
+
+const saveFertilization = () => {
+    const fertId = Number(fertSelect.value)
+    const amount = Number(fertCount.textContent)
+
+    const payload = {
+        fertId: fertId,
+        amount: amount,
+        plantCode: plantCode
+    }
+    console.log(payload)
+    addFertilization(payload)
+}
 
 saveFertBtn.addEventListener('click', (e) => {
     e.preventDefault()

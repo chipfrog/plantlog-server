@@ -247,15 +247,14 @@ li {
     position: absolute;
     left: 0;
     height: 46px;
-    width: 46px;
+    width: 70px;
     border-radius: 25px;
     border: 2px solid black;
     box-sizing: border-box;
 }
 
 #fert-handle {
-    left: 0;
-
+    left: -2px;
 }
 
 #save-fert {
