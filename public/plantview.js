@@ -113,8 +113,6 @@ let wateringSuccess = false
 
 let tempDelBtn = null
 
-let mouseX
-let mouseY
 let fertDragging = false
 
 
@@ -574,33 +572,24 @@ document.addEventListener('mouseup', (e) => {
 
 document.addEventListener('mousemove', (e) => {
     e.preventDefault()
-    mouseY = e.clientY
-    mouseX = e.clientX
     
     // Water slider
     if (dragging && !wateringSuccess && !emptying) {
-        convertYToSvgCoordinates(mouseY)
+        convertYToSvgCoordinates(e.clientY)
     }
 
     // Fert slider
     if (fertDragging) {
-        const rect = fertSlider.getBoundingClientRect()
-        let relPos = mouseX - rect.left - 23
-
-        if (relPos < 0) {
-            relPos = 0
-        }
-        else if (relPos > rect.width - 46) {
-            console.log('YLI OIKEA')
-            relPos = rect.width - 46
-        }
-
-        fertSliderHandle.style.setProperty("left", `${relPos}px`)
+        handleFertDragging(e.clientX)
     }
 })
 
 waterSVG.addEventListener('touchstart', (e) => {
     dragging = true
+})
+
+fertSliderHandle.addEventListener('touchstart', (e) => {
+    fertDragging = true
 })
 
 document.addEventListener('touchend', (e) => {
@@ -613,6 +602,27 @@ waterSVG.addEventListener('touchmove', (e) => {
         convertYToSvgCoordinates(e.touches[0].clientY)
     }
 })
+
+fertSliderHandle.addEventListener('touchmove', (e) => {
+    if (fertDragging) {
+        handleFertDragging(e.touches[0].clientX)
+    }
+})
+
+const handleFertDragging = (x) => {
+    const rect = fertSlider.getBoundingClientRect()
+    let relPos = x - rect.left - 23
+
+    if (relPos < 0) {
+        relPos = 0
+    }
+    else if (relPos > rect.width - 46) {
+        console.log('YLI OIKEA')
+        relPos = rect.width - 46
+    }
+
+    fertSliderHandle.style.setProperty("left", `${relPos}px`)
+}
 
 // Fertilization
 
