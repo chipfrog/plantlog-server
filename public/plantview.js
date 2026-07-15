@@ -565,10 +565,25 @@ waterSVG.addEventListener('mousedown', (e) => {
     dragging = true
 })
 
+waterSVG.addEventListener('touchstart', (e) => {
+    dragging = true
+})
+
+waterSVG.addEventListener('touchmove', (e) => {
+    if (dragging && !wateringSuccess) {
+        convertYToSvgCoordinates(e.touches[0].clientY)
+    }
+})
+
 document.addEventListener('mouseup', (e) => {
     e.preventDefault()
     dragging = false
     fertDragging = false
+
+    if (!fertSavingInProcess) {
+        fertSliderHandle.classList.add('spring-back')
+        fertSliderHandle.style.left = "-2px"
+    }
 })
 
 document.addEventListener('mousemove', (e) => {
@@ -582,41 +597,31 @@ document.addEventListener('mousemove', (e) => {
     // Fert slider
     if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.clientX)
-        fertSliderHandle.classList.remove('spring-back')
     }
-    else if (!fertSavingInProcess) {
-        fertSliderHandle.classList.add('spring-back')
-        fertSliderHandle.style.left = "-2px"
-    }
-})
-
-waterSVG.addEventListener('touchstart', (e) => {
-    dragging = true
 })
 
 fertSliderHandle.addEventListener('touchstart', (e) => {
     fertDragging = true
+    fertSliderHandle.classList.remove('spring-back')
 })
 
 document.addEventListener('touchend', (e) => {
     dragging = false
     fertDragging = false
-})
 
-waterSVG.addEventListener('touchmove', (e) => {
-    if (dragging && !wateringSuccess) {
-        convertYToSvgCoordinates(e.touches[0].clientY)
+    if (!fertSavingInProcess) {
+        fertSliderHandle.classList.add('spring-back')
+        fertSliderHandle.style.left = "-2px"
     }
 })
 
-fertSliderHandle.addEventListener('touchmove', (e) => {
+document.addEventListener('touchmove', (e) => {
     if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.touches[0].clientX)
     }
 })
 
 const handleFertDragging = (x) => {
-    fertSliderHandle.classList.remove('spring-back')
     const rect = fertSlider.getBoundingClientRect()
     let relPos = x - rect.left - 23
 
@@ -631,11 +636,11 @@ const handleFertDragging = (x) => {
     fertSliderHandle.style.setProperty("left", `${relPos}px`)
 }
 
-// Fertilization
-
 fertSliderHandle.addEventListener('mousedown', (e) => {
     e.preventDefault()
     fertDragging = true
+    fertSliderHandle.classList.remove('spring-back')
+
 })
 
 increaseFert.addEventListener('click', (e) => {
