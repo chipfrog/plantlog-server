@@ -582,7 +582,7 @@ document.addEventListener('mouseup', (e) => {
 
     if (!fertSavingInProcess) {
         fertSliderHandle.classList.add('spring-back')
-        fertSliderHandle.style.left = "-2px"
+        fertSliderHandle.style.left = "1px"
     }
 })
 
@@ -611,7 +611,7 @@ document.addEventListener('touchend', (e) => {
 
     if (!fertSavingInProcess) {
         fertSliderHandle.classList.add('spring-back')
-        fertSliderHandle.style.left = "-2px"
+        fertSliderHandle.style.left = "1px"
     }
 })
 

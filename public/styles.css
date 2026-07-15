@@ -236,21 +236,35 @@ li {
 
 .slider {
     position: relative;
-    width: 250px;
+    width: 300px;
     height: 50px;
     border: 2px solid black;
     border-radius: 25px;
     box-sizing: border-box;
+    background-color: rgba(135, 135, 137, 0.8);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
 
 .slider-handle {
     position: absolute;
     height: 46px;
-    left: -2px;
+    top: 0;
+    left: 1px;
     width: 70px;
     border-radius: 25px;
-    border: 2px solid black;
+    /* border: 1px solid black; */
+    box-shadow: -3px 0 0 1px rgb(46, 45, 45);
+
     box-sizing: border-box;
+    background-color: gainsboro;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #fert-handle {
@@ -258,7 +272,7 @@ li {
 }
 
 .spring-back {
-    transition: left .5s ease;
+    transition: left .3s ease;
 }
 
 #save-fert {
