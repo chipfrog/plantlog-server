@@ -582,6 +582,11 @@ document.addEventListener('mousemove', (e) => {
     // Fert slider
     if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.clientX)
+        fertSliderHandle.classList.remove('spring-back')
+    }
+    else if (!fertSavingInProcess) {
+        fertSliderHandle.classList.add('spring-back')
+        fertSliderHandle.style.left = "-2px"
     }
 })
 
@@ -611,6 +616,7 @@ fertSliderHandle.addEventListener('touchmove', (e) => {
 })
 
 const handleFertDragging = (x) => {
+    fertSliderHandle.classList.remove('spring-back')
     const rect = fertSlider.getBoundingClientRect()
     let relPos = x - rect.left - 23
 
@@ -622,7 +628,6 @@ const handleFertDragging = (x) => {
         saveFertilization()
         fertSavingInProcess = true
     }
-
     fertSliderHandle.style.setProperty("left", `${relPos}px`)
 }
 

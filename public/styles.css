@@ -245,8 +245,8 @@ li {
 
 .slider-handle {
     position: absolute;
-    left: 0;
     height: 46px;
+    left: -2px;
     width: 70px;
     border-radius: 25px;
     border: 2px solid black;
@@ -254,7 +254,11 @@ li {
 }
 
 #fert-handle {
-    left: -2px;
+    
+}
+
+.spring-back {
+    transition: left .5s ease;
 }
 
 #save-fert {
