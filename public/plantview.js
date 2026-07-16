@@ -118,7 +118,6 @@ let waterDragging = false
 let fertSavingInProcess = false
 let waterSavingInProcess = false
 
-
 init()
 
 function init() {
@@ -658,7 +657,7 @@ const handleFertDragging = (x) => {
         relPos = -2
     }
     else if (relPos > rect.width - 80) {
-        relPos = rect.width - 72
+        relPos = rect.width - 74
         addFertilization()
     }
     fertSliderHandle.style.setProperty("left", `${relPos}px`)
@@ -673,7 +672,7 @@ const handleWaterDragging = (x) => {
         relPos = -2
     }
     else if (relPos > rect.width - 80) {
-        relPos = rect.width - 72
+        relPos = rect.width - 74
 
         if (waterAmount > 0) {
             addWatering()

@@ -257,7 +257,7 @@ li {
     left: 0;
     border-radius: 25px;
     box-sizing: border-box;
-    background-color: rgb(33, 143, 93);
+    background-color: rgba(33, 143, 94, 0.495);
     width: var(--slider-before-width);
     height: 100%;
     transition: none;
@@ -273,9 +273,9 @@ li {
 
 .slider-handle {
     position: absolute;
-    height: 46px;
     top: 0;
-    left: 1px;
+    left: 100px;
+    height: 100%;
     width: 70px;
     border-radius: 25px;
     box-shadow: -3px 0 0 1px black;
