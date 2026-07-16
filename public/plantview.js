@@ -52,7 +52,6 @@ const unitTypeBtn = document.getElementById("unit-types-btn")
 const decreaseFert = document.getElementById("decrease-fert");
 const increaseFert = document.getElementById("increase-fert")
 const fertCount = document.getElementById("fert-count")
-const saveFertBtn = document.getElementById("save-fert")
 const fertSelect = document.getElementById("fertilizer-select")
 
 const plantCode = mainApp.dataset.plantCode
@@ -151,7 +150,17 @@ function updateLastFertilizedInfo(amount) {
     }
 }
 
-async function addFertilization(payload) {
+async function addFertilization() {
+    fertSavingInProcess = true
+    const fertId = Number(fertSelect.value)
+    const amount = Number(fertCount.textContent)
+
+    const payload = {
+        fertId: fertId,
+        amount: amount,
+        plantCode: plantCode
+    }
+
     const url = `/plant/${encodeURIComponent(plantCode)}/fertilizations`
 
     try {
@@ -165,6 +174,9 @@ async function addFertilization(payload) {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
+
+        fertSlider.querySelector('p').textContent = "Saved!"
+
         const updateData = await res.json()
         const amount = updateData.fertilization.amount
         const daysSince = updateData.daysSince
@@ -172,6 +184,13 @@ async function addFertilization(payload) {
         updateLastFertilizedInfo(amount)
         lastFertDate.innerText = daysSince
         addHistoryEntry(updateData, 'fertilization')
+
+        fertSliderHandle.classList.add('spring-back')
+        fertSlider.classList.add("spring-back-bg")
+        fertSliderHandle.style.left = "1px"
+        root.style.setProperty("--slider-before-width", `50px`)
+        fertSavingInProcess = false
+        fertSlider.querySelector('p').textContent = "Swipe to Save"
 
     } catch(e) {
         console.log(e)
@@ -636,8 +655,7 @@ const handleFertDragging = (x) => {
     }
     else if (relPos > rect.width - 80) {
         relPos = rect.width - 72
-        saveFertilization()
-        fertSavingInProcess = true
+        addFertilization()
     }
     fertSliderHandle.style.setProperty("left", `${relPos}px`)
     root.style.setProperty("--slider-before-width", `${relPos + 50}px`)
@@ -666,32 +684,5 @@ decreaseFert.addEventListener('click', (e)  => {
         currCount -= 1
         fertCount.textContent = currCount
     }
-})
-
-const saveFertilization = () => {
-    const fertId = Number(fertSelect.value)
-    const amount = Number(fertCount.textContent)
-
-    const payload = {
-        fertId: fertId,
-        amount: amount,
-        plantCode: plantCode
-    }
-    console.log(payload)
-    addFertilization(payload)
-}
-
-saveFertBtn.addEventListener('click', (e) => {
-    e.preventDefault()
-    const fertId = Number(fertSelect.value)
-    const amount = Number(fertCount.textContent)
-
-    const payload = {
-        fertId: fertId,
-        amount: amount,
-        plantCode: plantCode
-    }
-    console.log(payload)
-    addFertilization(payload)
 })
 

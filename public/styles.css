@@ -307,15 +307,6 @@ li {
     display: none;
 }
 
-.fert-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    width: 50px;
-    border-radius: 20%;
-}
-
 #fertilizer-select {
     margin-right: 1.5rem;
 }
