@@ -16,6 +16,8 @@
     --mist-progress: 270deg;
     --fertilizer-progress: 80deg;
 
+    --slider-before-width: 50px;
+
 }
 
 @font-face {
@@ -241,12 +243,32 @@ li {
     border: 2px solid black;
     border-radius: 25px;
     box-sizing: border-box;
-    background-color: rgba(135, 135, 137, 0.8);
+    background-color: rgba(135, 135, 137, 0.5);
 
     display: flex;
     justify-content: center;
     align-items: center;
-    
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 25px;
+    box-sizing: border-box;
+    background-color: rgb(33, 143, 93);
+    width: var(--slider-before-width);
+    height: 100%;
+    transition: none;
+}
+
+.slider.spring-back-bg::before {
+    transition: width .3s ease;
+}
+
+.slider p {
+    z-index: 0;
 }
 
 .slider-handle {
@@ -256,11 +278,10 @@ li {
     left: 1px;
     width: 70px;
     border-radius: 25px;
-    /* border: 1px solid black; */
-    box-shadow: -3px 0 0 1px rgb(46, 45, 45);
+    box-shadow: -3px 0 0 1px black;
 
     box-sizing: border-box;
-    background-color: gainsboro;
+    background-color: #D9E9CF;
 
     display: flex;
     justify-content: center;

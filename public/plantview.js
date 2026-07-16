@@ -582,7 +582,9 @@ document.addEventListener('mouseup', (e) => {
 
     if (!fertSavingInProcess) {
         fertSliderHandle.classList.add('spring-back')
+        fertSlider.classList.add("spring-back-bg")
         fertSliderHandle.style.left = "1px"
+        root.style.setProperty("--slider-before-width", `50px`)
     }
 })
 
@@ -603,6 +605,7 @@ document.addEventListener('mousemove', (e) => {
 fertSliderHandle.addEventListener('touchstart', (e) => {
     fertDragging = true
     fertSliderHandle.classList.remove('spring-back')
+    fertSlider.classList.remove('spring-back-bg')
 })
 
 document.addEventListener('touchend', (e) => {
@@ -611,7 +614,9 @@ document.addEventListener('touchend', (e) => {
 
     if (!fertSavingInProcess) {
         fertSliderHandle.classList.add('spring-back')
+        fertSlider.classList.add("spring-back-bg")
         fertSliderHandle.style.left = "1px"
+        root.style.setProperty("--slider-before-width", `50px`)
     }
 })
 
@@ -623,6 +628,7 @@ document.addEventListener('touchmove', (e) => {
 
 const handleFertDragging = (x) => {
     const rect = fertSlider.getBoundingClientRect()
+
     let relPos = x - rect.left - 23
 
     if (relPos < 0) {
@@ -634,13 +640,14 @@ const handleFertDragging = (x) => {
         fertSavingInProcess = true
     }
     fertSliderHandle.style.setProperty("left", `${relPos}px`)
+    root.style.setProperty("--slider-before-width", `${relPos + 50}px`)
 }
 
 fertSliderHandle.addEventListener('mousedown', (e) => {
     e.preventDefault()
     fertDragging = true
     fertSliderHandle.classList.remove('spring-back')
-
+    fertSlider.classList.remove('spring-back-bg')
 })
 
 increaseFert.addEventListener('click', (e) => {
