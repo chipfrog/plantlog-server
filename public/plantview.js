@@ -174,7 +174,7 @@ async function addFertilization() {
             const err = await res.json().catch(() => ({}))
             throw new Error(err.message || `HTTP ${res.status}`)
         }
-
+        
         fertSlider.querySelector('p').textContent = "Saved!"
 
         const updateData = await res.json()
@@ -185,12 +185,14 @@ async function addFertilization() {
         lastFertDate.innerText = daysSince
         addHistoryEntry(updateData, 'fertilization')
 
-        fertSliderHandle.classList.add('spring-back')
-        fertSlider.classList.add("spring-back-bg")
-        fertSliderHandle.style.left = "1px"
-        root.style.setProperty("--slider-before-width", `50px`)
-        fertSavingInProcess = false
-        fertSlider.querySelector('p').textContent = "Swipe to Save"
+        setTimeout(() => {
+            fertSliderHandle.classList.add('spring-back')
+            fertSlider.classList.add("spring-back-bg")
+            fertSliderHandle.style.left = "1px"
+            root.style.setProperty("--slider-before-width", `50px`)
+            fertSavingInProcess = false
+            fertSlider.querySelector('p').textContent = "Swipe to Save"
+        }, 1000)
 
     } catch(e) {
         console.log(e)
