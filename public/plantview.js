@@ -11,9 +11,6 @@ const deleteConfirmationBtn = document.getElementById("delete-confirmation-btn")
 const deleteType = document.querySelector(".delete-type")
 const deleteDate = document.querySelector(".delete-date")
 
-const waterBtn = document.getElementById("water-btn")
-const waterBtnInternals = document.getElementsByClassName("water-btn-internals")[0]
-
 const lastWateredAmount = document.getElementById("last-watered-amount")
 const lastWateredDate = document.getElementById("last-watered-date")
 
@@ -41,8 +38,12 @@ const closeWaterViewBtn = document.getElementById("close-water-btn")
 const timelineBtn = document.getElementById("timeline-btn")
 const closeTimelineViewBtn = document.getElementById("close-history-btn")
 
-const fertSliderHandle  = document.getElementById("fert-handle")
+const waterSwiper = document.getElementById("water-swiper")
+const waterSwiperHandle = document.getElementById("water-swiper-handle") 
+
+const fertSliderHandle = document.getElementById("fert-handle")
 const fertSlider = document.getElementById("fert-slider")
+
 const fertilizeBtn = document.getElementById("fertilize-btn")
 const closeFertilizeBtn = document.getElementById("close-fertilize-btn")
 
@@ -113,7 +114,9 @@ let wateringSuccess = false
 let tempDelBtn = null
 
 let fertDragging = false
+let waterDragging = false
 let fertSavingInProcess = false
+let waterSavingInProcess = false
 
 
 init()
@@ -189,7 +192,7 @@ async function addFertilization() {
             fertSliderHandle.classList.add('spring-back')
             fertSlider.classList.add("spring-back-bg")
             fertSliderHandle.style.left = "1px"
-            root.style.setProperty("--slider-before-width", `50px`)
+            root.style.setProperty("--slider-before-width", '50px')
             fertSavingInProcess = false
             fertSlider.querySelector('p').textContent = "Swipe to Save"
         }, 1000)
@@ -201,6 +204,8 @@ async function addFertilization() {
 }
  
 async function addWatering() {
+    waterSavingInProcess = true
+
     const url = `/plant/${encodeURIComponent(plantCode)}/waterings`
     const payload = getPayload()
 
@@ -216,8 +221,12 @@ async function addWatering() {
         }
 
         // Update plant info view if res.ok
+
         const updateData = await res.json()
+        
         wateringSuccess = true
+        waterSwiper.querySelector('p').textContent = "Saved!"
+
         const amount = updateData.watering.amount
         const daysSince = updateData.daysSince 
 
@@ -232,12 +241,20 @@ async function addWatering() {
             addHistoryEntry(updateData, 'water')
         }
 
+         setTimeout(() => {
+            waterSwiperHandle.classList.add('spring-back')
+            waterSwiper.classList.add("spring-back-bg")
+            waterSwiperHandle.style.left = "1px"
+            root.style.setProperty("--slider-before-width", '50px')
+            waterSavingInProcess = false
+            waterSwiper.querySelector('p').textContent = "Swipe to Save"
+        }, 1000)
+
     } catch(e) {
         console.error(e);
         wateringSuccess = false
         alert("Failed to log watering.");
     }
-    showStatusInBtn(wateringSuccess)
 }
 
 function addHistoryEntry(update, type) {
@@ -271,8 +288,6 @@ function addHistoryEntry(update, type) {
         instance.querySelector('.delete-btn').id = `fertilization-${update.fertilization.id}`
 
     }
-
-    console.log(instance)
     actionList.prepend(instance)
 }
 
@@ -390,33 +405,13 @@ function getPayload() {
     return payload
 }
 
-function showStatusInBtn(success) {
-    if (success) {
-        waterBtn.innerText = "Plant watered!"
-        waterBtn.classList.add('success', 'show-result')
-    } else {
-        waterBtn.innerText = "Watering failed!"
-        waterBtn.classList.add('failure', 'show-result')
-    }
-    emptying = true
-
-    setTimeout(() => {
-        waterBtn.classList.remove('success', 'failure', 'filled', 'show-result')
-        waterBtn.innerText = "Hold to Water"
-        emptying = false
-    }, 2500)
-}
-
 function emptyWaterMeter() {
     waterSliderVal -= 10
     waterAmount = waterSliderVal - (waterSliderVal % 100)
     waterAmountText.innerText = `${waterAmount} ml`
-    waterBtn.classList.add('inactive')
 
     if (waterSliderVal <= 0) {
         wateringSuccess = false
-        waterBtn.classList.remove('inactive')
-        waterBtn.disabled = true
     }
 }
 
@@ -442,8 +437,6 @@ function convertYToSvgCoordinates(y) {
     } else {
         waterAmountText.innerText = `${waterAmount} ml`
     }
-
-    toggleWaterBtnActivity()
 }
 
 function convertMlToDescription(ml) {
@@ -464,14 +457,6 @@ function convertMlToDescription(ml) {
     }
 
     return waterDesc
-}
-
-function toggleWaterBtnActivity () {
-    if (waterAmount <= 0) {
-        waterBtn.disabled = true
-    } else if (!emptying) {
-        waterBtn.disabled = false
-    }
 }
 
 function animate() {
@@ -571,15 +556,6 @@ spraySVG.addEventListener('click', (e) => {
     }
 })
 
-waterBtn.addEventListener('transitionend', (e) => {
-    e.preventDefault()
-    const style = getComputedStyle(waterBtn, '::before')
-    if (waterAmount > 0 && parseInt(style.width) > 0) {
-        addWatering()
-        waterBtn.classList.add('filled')
-    }
-})
-
 // Handle mouse & touch input to water slider
 waterSVG.addEventListener('mousedown', (e) => {
     e.preventDefault()
@@ -600,12 +576,18 @@ document.addEventListener('mouseup', (e) => {
     e.preventDefault()
     dragging = false
     fertDragging = false
+    waterDragging = false
 
-    if (!fertSavingInProcess) {
+    if (!fertSavingInProcess && !waterSavingInProcess) {
         fertSliderHandle.classList.add('spring-back')
-        fertSlider.classList.add("spring-back-bg")
-        fertSliderHandle.style.left = "1px"
-        root.style.setProperty("--slider-before-width", `50px`)
+        fertSlider.classList.add('spring-back-bg')
+        fertSliderHandle.style.left = '1px'
+
+        waterSwiperHandle.classList.add('spring-back')
+        waterSwiper.classList.add('spring-back-bg')
+        waterSwiperHandle.style.left = '1px'
+
+        root.style.setProperty('--slider-before-width', '50px')
     }
 })
 
@@ -617,7 +599,12 @@ document.addEventListener('mousemove', (e) => {
         convertYToSvgCoordinates(e.clientY)
     }
 
-    // Fert slider
+    // Water swiper
+    if (waterDragging && !waterSavingInProcess) {
+        handleWaterDragging(e.clientX)
+    }
+
+    // Fert swiper
     if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.clientX)
     }
@@ -629,14 +616,27 @@ fertSliderHandle.addEventListener('touchstart', (e) => {
     fertSlider.classList.remove('spring-back-bg')
 })
 
+waterSwiperHandle.addEventListener('touchstart', (e) => {
+    waterDragging = true
+    waterSwiperHandle.classList.remove('spring-back')
+    waterSwiper.classList.remove('spring-back-bg')
+})
+
 document.addEventListener('touchend', (e) => {
     dragging = false
     fertDragging = false
+    waterDragging = false
 
-    if (!fertSavingInProcess) {
+    if (!fertSavingInProcess && !waterSavingInProcess) {
+        
         fertSliderHandle.classList.add('spring-back')
         fertSlider.classList.add("spring-back-bg")
         fertSliderHandle.style.left = "1px"
+
+        waterSwiperHandle.classList.add('spring-back')
+        waterSwiper.classList.add('spring-back-bg')
+        waterSwiperHandle.style.left = '1px'
+
         root.style.setProperty("--slider-before-width", `50px`)
     }
 })
@@ -645,11 +645,13 @@ document.addEventListener('touchmove', (e) => {
     if (fertDragging && !fertSavingInProcess) {
         handleFertDragging(e.touches[0].clientX)
     }
+    if (waterDragging && !waterSavingInProcess) {
+        handleWaterDragging(e.touches[0].clientX)
+    }
 })
 
 const handleFertDragging = (x) => {
     const rect = fertSlider.getBoundingClientRect()
-
     let relPos = x - rect.left - 23
 
     if (relPos < 0) {
@@ -663,11 +665,36 @@ const handleFertDragging = (x) => {
     root.style.setProperty("--slider-before-width", `${relPos + 50}px`)
 }
 
+const handleWaterDragging = (x) => {
+    const rect = waterSwiper.getBoundingClientRect()
+    let relPos = x - rect.left - 23
+
+    if (relPos < 0) {
+        relPos = -2
+    }
+    else if (relPos > rect.width - 80) {
+        relPos = rect.width - 72
+
+        if (waterAmount > 0) {
+            addWatering()
+        }
+    }
+    waterSwiperHandle.style.setProperty("left", `${relPos}px`)
+    root.style.setProperty("--slider-before-width", `${relPos + 50}px`)
+}
+
 fertSliderHandle.addEventListener('mousedown', (e) => {
     e.preventDefault()
     fertDragging = true
     fertSliderHandle.classList.remove('spring-back')
     fertSlider.classList.remove('spring-back-bg')
+})
+
+waterSwiperHandle.addEventListener('mousedown', (e) => {
+    e.preventDefault()
+    waterDragging = true
+    waterSwiperHandle.classList.remove('spring-back')
+    waterSwiper.classList.remove('spring-back-bg')
 })
 
 increaseFert.addEventListener('click', (e) => {
